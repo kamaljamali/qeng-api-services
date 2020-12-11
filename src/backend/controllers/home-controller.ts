@@ -1,9 +1,7 @@
 import ISessionDataModel from "@BE/data-model/session-data-model";
 import AuthHelper from "@BE/helpers/auth-helper";
-import RedisHelper from "@BE/helpers/redis-helper";
 import GlobalData from "@Core/Global/global-data";
-import RedisClientHelper from "@Core/Helpers/redis-client-helper";
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
 /**
  * Home controller
@@ -18,21 +16,9 @@ export default class HomeController {
   public async index(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
-    const isChecked = await AuthHelper.check(req);
-
-    if (isChecked) {
-      let sessionData: ISessionDataModel = req.session as ISessionDataModel;
-      sessionData.viewCount = (sessionData.viewCount ?? 0) + 1;
-
-      res.render("home.pug", { message: "Your are logged in", loggedIn: true });
-    } else {
-      res.render("home.pug", {
-        message: "Your are not logged in",
-        loggedIn: false,
-      });
-    }
+    res.render("home.pug", { message: "Your are logged in", loggedIn: true });
   }
 
   /**
@@ -44,7 +30,7 @@ export default class HomeController {
   public async login(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const sessionData: ISessionDataModel = {
       loginAt: new Date(),
@@ -65,7 +51,7 @@ export default class HomeController {
   public async logout(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     await AuthHelper.logout(req);
 

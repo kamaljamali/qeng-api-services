@@ -1,12 +1,12 @@
 import {
+  Document,
   Model,
+  Mongoose,
   Schema,
   SchemaDefinition,
   SchemaOptions,
   SchemaTimestampsConfig,
-  Mongoose,
   Types,
-  Document,
 } from "mongoose";
 import { yellow } from "chalk";
 import IDBModel from "@Lib/interfaces/core/db-model-interface";
@@ -18,9 +18,14 @@ import GlobalData from "@Core/Global/global-data";
 export interface IUserModel extends Document {
   name: string;
   pwd: string;
-  activated_at: Date;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  activated_at?: Date;
   created_at: Date;
   created_by?: Types.ObjectId;
+
+  changePwd(newPwd: string): void;
 }
 
 /**
@@ -50,12 +55,12 @@ export default class UserModel implements IDBModel {
     const model: Model<IUserModel> = dbEngine.model<IUserModel>(
       this.getName(),
       this.getSchema(),
-      this.getDbName()
+      this.getDbName(),
     );
 
     /* Log */
     GlobalData.logger.info(
-      `Model ${yellow(this.getName())} loaded successfully`
+      `Model ${yellow(this.getName())} loaded successfully`,
     );
 
     return model;
@@ -69,12 +74,27 @@ export default class UserModel implements IDBModel {
       name: {
         type: String,
         required: true,
-        trimed: true,
+        trim: true,
         unique: true,
         index: true,
       },
 
       pwd: {
+        type: String,
+        required: true,
+      },
+
+      first_name: {
+        type: String,
+        required: true,
+      },
+
+      last_name: {
+        type: String,
+        required: true,
+      },
+
+      phone: {
         type: String,
         required: true,
       },
@@ -91,6 +111,14 @@ export default class UserModel implements IDBModel {
         updatedAt: "updated_at",
       } as SchemaTimestampsConfig,
     } as SchemaOptions);
+
+    /* Methods */
+    schema.methods.changePwd = async function changePwd(
+      newPwd: string,
+    ): Promise<any> {
+      this.pwd = newPwd;
+      return this.save();
+    };
 
     /* Return schema */
     return schema;

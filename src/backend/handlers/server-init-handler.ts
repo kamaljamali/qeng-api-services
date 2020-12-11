@@ -2,6 +2,9 @@ import { yellow } from "chalk";
 import GlobalData from "@Core/Global/global-data";
 import IEventHandler from "@Lib/interfaces/core/event-handler-interface";
 import RedisHelper from "@BE/helpers/redis-helper";
+import GlobalHelper from "@BE/helpers/global-helper";
+import { Glob } from "glob";
+import SmsCenter from "@BE/helpers/sms-center";
 
 /**
  * Server-init handler
@@ -34,8 +37,18 @@ export default class ServerInitHandler implements IEventHandler {
         yellow(this.getEventName())
       } handler initialized successfully\n\t${payload.readyAt}`,
     );
+    this.initServerHelper();
+  }
 
-    /* Initialization */
-    await RedisHelper.connect();
+  /**
+   * Init server helpers
+   */
+  private async initServerHelper(): Promise<void> {
+    /* Redis helper */
+    GlobalHelper.redisHelper = new RedisHelper();
+    await GlobalHelper.redisHelper.connect();
+
+    /* Sms Helper */
+    GlobalHelper.smsCenter = new SmsCenter();
   }
 }

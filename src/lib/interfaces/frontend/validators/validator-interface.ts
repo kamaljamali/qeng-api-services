@@ -1,5 +1,5 @@
 import { Validator, AttributeNames, Rules, ErrorMessages } from "validatorjs";
-import { ActionResultType } from "@Lib/types/frontend/global/action-result-type";
+import { ActionResultType } from "@Lib/types/core/action-result-type";
 
 /**
  * Validator interface
