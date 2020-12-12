@@ -2,7 +2,6 @@ import * as _ from "lodash";
 import { NextFunction, Request, Response } from "express";
 import { CountryType } from "@Lib/types/frontend/global/country-type";
 import { ActionResultType } from "@Lib/types/core/action-result-type";
-import xContentTypeOptions from "helmet/dist/middlewares/x-content-type-options";
 import { ProvinceType } from "@Lib/types/frontend/global/province-type";
 import { RequestCityType } from "@Lib/types/frontend/global/request-city-type";
 import { CityType } from "@Lib/types/frontend/global/city-type";
