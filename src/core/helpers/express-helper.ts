@@ -263,6 +263,9 @@ Server started
    */
   private async setupBodyAndCookieParser(): Promise<void> {
     const app = this.app;
+    const config: ExpressConfigType = await GlobalMethods.config(
+      "core/express",
+    ) as ExpressConfigType;
 
     /* Add cookie-parse */
     app.use(CookieParser());
@@ -270,11 +273,12 @@ Server started
     /* Add body parser */
     app.use(
       BodyParser.urlencoded({
+        limit: config.bodyParser.limit,
         extended: false,
       } as BodyParser.OptionsUrlencoded),
     );
 
-    app.use(BodyParser.json());
+    app.use(BodyParser.json({ limit: config.bodyParser.limit }));
   }
 
   /**

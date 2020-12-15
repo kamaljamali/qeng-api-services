@@ -18,6 +18,10 @@ export type ExpressConfigType = {
 
   useMulter: boolean;
 
+  bodyParser: {
+    limit: string;
+  };
+
   sslServerKey: string;
   sslServerCert: string;
 };

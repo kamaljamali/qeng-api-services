@@ -19,6 +19,11 @@ export default {
   throttleMax: parseInt(throttleMax),
   throttleDelay: parseInt(throttleDelay),
 
+  /* bodyParser */
+  bodyParser: {
+    limit: process.env.SERVER_REQUEST_MAX_LIMIT || "2mb",
+  },
+
   /* Use multer as default */
   useMulter,
 
