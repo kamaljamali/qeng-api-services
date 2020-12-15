@@ -125,6 +125,11 @@ export default class UserManagementHelper {
 
             if (optData.activationCode == otpResponse.activationCode) {
                 loginSuccess = true;
+                /* Delete otp-request from redis-db */
+                const delRedisData = await GlobalHelper.redisHelper?.runCmd(
+                    "del",
+                    `otp-request:${otpPerfix}:${otpResponse.token}`
+                );
             }
         }
 
@@ -173,6 +178,12 @@ export default class UserManagementHelper {
                     await user.save();
 
                     operationResult = true;
+
+                    /* Delete otp-request from redis-db */
+                    const delRedisData = await GlobalHelper.redisHelper?.runCmd(
+                        "del",
+                        `otp-request:${otpPerfix}:${otpResponse.token}`
+                    );
                 }
             }
         }
@@ -265,30 +276,29 @@ export default class UserManagementHelper {
             const otpData: OtpRegisterDataType = JSON.parse(redisData);
 
             if (otpData.activationCode == otpResponse.activationCode) {
+                /* Generate password */
+                let password: string = await GlobalHelper.generatePassword?.generatePassword();
+
                 const userData = {
                     name: otpData.userRegisterData.nationalId,
                     phone: otpData.userRegisterData.phoneNumber,
                     first_name: otpData.userRegisterData.firstName,
                     last_name: otpData.userRegisterData.lastName,
-                    pwd: otpData.userRegisterData.phoneNumber,
+                    pwd: password,
                     activated_at: new Date(),
                 };
-                console.log(userData);
+
                 /* Register new user */
                 const User: Model<IUserModel> = GlobalData.dbEngine.model(
                     "User"
                 );
                 const newUser: IUserModel = await User.create(userData);
 
-                /* TODO: GENERATE RESET TOKEN */
-                // /* Issue reset password  */
-                // const resetPassResult = await this.requestOtpToken(
-                //   {
-                //     nationalId: newUser.name,
-                //     phoneNumber: newUser.phone,
-                //   },
-                //   OtpPrefixEnum.FORGET_PASSWORD,
-                // );
+                /* Delete otp-request from redis-db */
+                const delRedisData = await GlobalHelper.redisHelper?.runCmd(
+                    "del",
+                    `otp-request:${otpPerfix}:${otpResponse.token}`
+                );
 
                 /* Setup result */
                 result.success = true;
@@ -346,7 +356,7 @@ export default class UserManagementHelper {
 
         const query = {
             $or: [
-                { phone_number: temp.phoneNumber },
+                { phone_number: temp.phoneNumber || phoneNumber },
                 { phone_number: "+98" + temp.phoneNumber || phoneNumber },
                 {
                     phone_number:
@@ -354,7 +364,7 @@ export default class UserManagementHelper {
                 },
             ],
         };
-
+        console.log(query);
         const data = await UserModel.findOne(query);
 
         const result = {
@@ -370,14 +380,14 @@ export default class UserManagementHelper {
      */
     public static async checkUserActivationCodeResetPassword(
         activationCodeData: OtpResponseType,
-        optPerfix: string
+        otpPerfix: string
     ): Promise<ActionResultType> {
         let result: ActionResultType;
 
         /* Store opt-request in redis-db */
         const redisData = await GlobalHelper.redisHelper?.runCmd(
             "get",
-            `otp-request:${optPerfix}:${activationCodeData.token}`
+            `otp-request:${otpPerfix}:${activationCodeData.token}`
         );
 
         let tokenSuccess: boolean = false;
@@ -386,6 +396,12 @@ export default class UserManagementHelper {
 
             if (optData.activationCode == activationCodeData.activationCode) {
                 tokenSuccess = true;
+
+                /* Delete otp-request from redis-db */
+                const delRedisData = await GlobalHelper.redisHelper?.runCmd(
+                    "del",
+                    `otp-request:${otpPerfix}:${activationCodeData.token}`
+                );
             }
         }
 
@@ -402,14 +418,14 @@ export default class UserManagementHelper {
      */
     public static async checkUserActivationCodeRegister(
         activationCodeData: OtpResponseType,
-        optPerfix: string
+        otpPerfix: string
     ): Promise<ActionResultType> {
         let result: ActionResultType;
 
         /* Store opt-request in redis-db */
         const redisData = await GlobalHelper.redisHelper?.runCmd(
             "get",
-            `otp-request:${optPerfix}:${activationCodeData.token}`
+            `otp-request:${otpPerfix}:${activationCodeData.token}`
         );
 
         let tokenSuccess: boolean = false;
@@ -419,7 +435,11 @@ export default class UserManagementHelper {
             if (optData.activationCode == activationCodeData.activationCode) {
                 tokenSuccess = true;
 
-                /* CREATE USER  */
+                /* Delete otp-request from redis-db */
+                const delRedisData = await GlobalHelper.redisHelper?.runCmd(
+                    "del",
+                    `otp-request:${otpPerfix}:${activationCodeData.token}`
+                );
             }
         }
 
