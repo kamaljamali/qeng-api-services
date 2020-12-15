@@ -12,277 +12,262 @@ import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
  * Auth controller
  */
 export default class AuthController {
-  /**
-   * Auth/login action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async login(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    res.render("pages/auth/login.pug");
-  }
+    /**
+     * Auth/login action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async login(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        res.render("pages/auth/login.pug");
+    }
 
-  /**
-   * Auth/login-by-user-data action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async loginByUserData(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const userData: UserLoginDataType = req.body as UserLoginDataType;
+    /**
+     * Auth/login-by-user-data action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async loginByUserData(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const userData: UserLoginDataType = req.body as UserLoginDataType;
 
-    const result: ActionResultType = await UserManagementHelper.loginByUserData(
-      userData
-    );
+        const result: ActionResultType = await UserManagementHelper.loginByUserData(
+            userData
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/request-otp-token action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async requestOtpToken(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const requestData: UserLoginOtpType = req.body as UserLoginOtpType;
+    /**
+     * Auth/request-otp-token action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async requestOtpToken(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const requestData: UserLoginOtpType = req.body as UserLoginOtpType;
 
-    const result: ActionResultType = await UserManagementHelper.requestOtpToken(
-      requestData,
-      OtpPrefixEnum.LOGIN
-    );
+        const result: ActionResultType = await UserManagementHelper.requestOtpToken(
+            requestData,
+            OtpPrefixEnum.LOGIN
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/login-by-otp-token action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async loginByOtpToken(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const otpResponse: OtpResponseType = req.body as OtpResponseType;
+    /**
+     * Auth/login-by-otp-token action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async loginByOtpToken(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const otpResponse: OtpResponseType = req.body as OtpResponseType;
 
-    const result: ActionResultType = await UserManagementHelper.loginByOtpToken(
-      otpResponse,
-      OtpPrefixEnum.LOGIN
-    );
+        const result: ActionResultType = await UserManagementHelper.loginByOtpToken(
+            otpResponse,
+            OtpPrefixEnum.LOGIN
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/request-forget-password-token action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async requestForgetPasswordToken(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const userData: UserLoginOtpType = req.body as UserLoginOtpType;
+    /**
+     * Auth/request-forget-password-token action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async requestForgetPasswordToken(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const userData: UserLoginOtpType = req.body as UserLoginOtpType;
 
-    const result: ActionResultType = await UserManagementHelper.requestOtpToken(
-      userData,
-      OtpPrefixEnum.FORGET_PASSWORD
-    );
+        const result: ActionResultType = await UserManagementHelper.requestOtpToken(
+            userData,
+            OtpPrefixEnum.FORGET_PASSWORD
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/reset-password action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async resetPassword(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const userData: UserResetPasswordType = req.body as UserResetPasswordType;
-    const result: ActionResultType = await UserManagementHelper.resetPassword(
-      userData,
-      OtpPrefixEnum.FORGET_PASSWORD
-    );
+    /**
+     * Auth/reset-password action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async resetPassword(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const userData: UserResetPasswordType = req.body as UserResetPasswordType;
+        const result: ActionResultType = await UserManagementHelper.resetPassword(
+            userData,
+            OtpPrefixEnum.FORGET_PASSWORD
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/check-user-national-id action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async checkUserNationalId(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const nationalID: string = req.body as string;
+    /**
+     * Auth/check-user-national-id action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async checkUserNationalId(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const nationalID: string = req.body as string;
 
-    const result: ActionResultType = await UserManagementHelper.checkUserNationalId(
-      nationalID
-    );
+        const result: ActionResultType = await UserManagementHelper.checkUserNationalId(
+            nationalID
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/check-user-phone-number action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async checkUserPhoneNumber(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const phoneNumber: string = req.body as string;
+    /**
+     * Auth/check-user-phone-number action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async checkUserPhoneNumber(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const phoneNumber: string = req.body as string;
 
-    const result: ActionResultType = await UserManagementHelper.checkUserPhoneNumber(
-      phoneNumber
-    );
+        const result: ActionResultType = await UserManagementHelper.checkUserPhoneNumber(
+            phoneNumber
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/new-user-register-request action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async newUserRegisterRequest(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const userData: UserRegisterType = req.body as UserRegisterType;
+    /**
+     * Auth/new-user-register-request action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async newUserRegisterRequest(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const userData: UserRegisterType = req.body as UserRegisterType;
 
-    const result: ActionResultType = await UserManagementHelper.requestOtpTokenRegister(
-      userData,
-      OtpPrefixEnum.REGISTER
-    );
+        const temp = JSON.parse(JSON.stringify(userData));
+        /***************Check NationalId*************** */
+        const flagNID: ActionResultType = await UserManagementHelper.checkUserNationalId(
+            temp.nationalId
+        );
+        if (!flagNID.success) {
+            res.status(200).send(flagNID).end();
+        } else {
+            /***************Check Phone Number************* */
+            const flagPhone: ActionResultType = await UserManagementHelper.checkUserPhoneNumber(
+                temp.phoneNumber
+            );
+            if (!flagPhone.success) {
+                res.status(200).send(flagPhone).end();
+            } else {
+                /********************************************** */
+                const result: ActionResultType = await UserManagementHelper.requestOtpTokenRegister(
+                    userData,
+                    OtpPrefixEnum.REGISTER
+                );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+                res.status(200).send(result).end();
+            }
+        }
+    }
 
-  /**
-   * Auth/confirm-new-user-register action
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async confirmNewUserRegister(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const userData: OtpResponseType = req.body as OtpResponseType;
+    /**
+     * Auth/confirm-new-user-register action
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async confirmNewUserRegister(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const userData: OtpResponseType = req.body as OtpResponseType;
 
-    const result: ActionResultType = await UserManagementHelper.confirmNewUserRegister(
-      userData,
-      OtpPrefixEnum.REGISTER
-    );
+        const result: ActionResultType = await UserManagementHelper.confirmNewUserRegister(
+            userData,
+            OtpPrefixEnum.REGISTER
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/check-user-activation-code-reset-password
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async checkUserActivationCodeResetPassword(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const activationCodeData: OtpResponseType = req.body as OtpResponseType;
+    /**
+     * Auth/check-user-activation-code-reset-password
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async checkUserActivationCodeResetPassword(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const activationCodeData: OtpResponseType = req.body as OtpResponseType;
 
-    const result: ActionResultType = await UserManagementHelper.checkUserActivationCodeResetPassword(
-      activationCodeData,
-      OtpPrefixEnum.FORGET_PASSWORD
-    );
+        const result: ActionResultType = await UserManagementHelper.checkUserActivationCodeResetPassword(
+            activationCodeData,
+            OtpPrefixEnum.FORGET_PASSWORD
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 
-  /**
-   * Auth/check-user-activation-code-Register
-   * @param req Express.Request Request
-   * @param res Express.Response Response
-   * @param next Express.NextFunction next function
-   */
-  public async checkUserActivationCodeRegister(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const activationCodeData: OtpResponseType = req.body as OtpResponseType;
+    /**
+     * Auth/check-user-activation-code-Register
+     * @param req Express.Request Request
+     * @param res Express.Response Response
+     * @param next Express.NextFunction next function
+     */
+    public async checkUserActivationCodeRegister(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const activationCodeData: OtpResponseType = req.body as OtpResponseType;
 
-    const result: ActionResultType = await UserManagementHelper.checkUserActivationCodeRegister(
-      activationCodeData,
-      OtpPrefixEnum.REGISTER
-    );
+        const result: ActionResultType = await UserManagementHelper.checkUserActivationCodeRegister(
+            activationCodeData,
+            OtpPrefixEnum.REGISTER
+        );
 
-    res
-      .status(200)
-      .send(result)
-      .end();
-  }
+        res.status(200).send(result).end();
+    }
 }
