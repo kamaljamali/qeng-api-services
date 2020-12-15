@@ -300,6 +300,12 @@ export default class UserManagementHelper {
                     `otp-request:${otpPerfix}:${otpResponse.token}`
                 );
 
+                /* Send activation code to user */
+                GlobalHelper.smsCenter?.sendSms(
+                    userData.phone,
+                    `${Lang.YOUR_PASSWORD_IS}:\n${password}`
+                );
+
                 /* Setup result */
                 result.success = true;
                 result.data = `${Lang.SUCCESS_FULLY_REGISTER}<br/>${Lang.PASSWORD_SEND_TO_PHONE_NUMBER}`;
