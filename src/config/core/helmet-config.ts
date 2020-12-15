@@ -18,12 +18,9 @@ export default {
       frameSrc: ["'self'", " data: blob:"],
       styleSrc: ["*", "'self'", "data: blob: 'unsafe-inline'"],
       fontSrc: ["*", "'self'", "data: blob: 'unsafe-inline'"],
-
       // upgradeInsecureRequests: ["'self'"],
     },
-    
     //  reportOnly: true,
-    setAllHeaders: false,
   },
 
   dnsPrefetchControl: {},
