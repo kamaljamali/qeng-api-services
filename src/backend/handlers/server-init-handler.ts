@@ -3,12 +3,9 @@ import GlobalData from "@Core/Global/global-data";
 import IEventHandler from "@Lib/interfaces/core/event-handler-interface";
 import RedisHelper from "@BE/helpers/redis-helper";
 import GlobalHelper from "@BE/helpers/global-helper";
-<<<<<<< HEAD
 import { Glob } from "glob";
 import SmsCenter from "@BE/helpers/sms-center";
 import GeneratePassword from "@BE/helpers/generate-password";
-=======
->>>>>>> 4b5172d704079db8a76e593890a405a995c4b72e
 
 /**
  * Server-init handler
