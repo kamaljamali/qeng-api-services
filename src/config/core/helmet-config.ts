@@ -21,8 +21,9 @@ export default {
 
       // upgradeInsecureRequests: ["'self'"],
     },
+    
     //  reportOnly: true,
-    setAllHeaders: true,
+    setAllHeaders: false,
   },
 
   dnsPrefetchControl: {},
