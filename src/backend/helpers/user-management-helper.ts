@@ -40,7 +40,7 @@ export default class UserManagementHelper {
             data:
                 data != null
                     ? GlobalData.router.routerManager.route("home.index")
-                    : Lang.INVALIDNATIONALIDORPASSWORD,
+                    : Lang.INVALID_NATIONALID_OR_PASSWORD,
         };
 
         return result;
@@ -95,7 +95,7 @@ export default class UserManagementHelper {
         } else {
             result = {
                 success: false,
-                data: Lang.INVALIDNATIONALIDORPHONENUMBER,
+                data: Lang.INVALID_NATIONALID_OR_PHONE_NUMBER,
             };
         }
 
@@ -132,7 +132,7 @@ export default class UserManagementHelper {
             success: loginSuccess,
             data: loginSuccess
                 ? GlobalData.router.routerManager.route("home.index")
-                : Lang.INVALIDOTP,
+                : Lang.INVALID_OTP,
         };
 
         return result;
@@ -181,7 +181,7 @@ export default class UserManagementHelper {
             success: operationResult,
             data: operationResult
                 ? GlobalData.router.routerManager.route("auth.login")
-                : Lang.INVALIDOTP,
+                : Lang.INVALID_OTP,
         };
 
         return result;
@@ -208,7 +208,7 @@ export default class UserManagementHelper {
         if (user) {
             result = {
                 success: false,
-                data: Lang.ALREADYREGISTERUSER,
+                data: Lang.ALREADY_REGISTER_USER,
             };
         } else {
             const activationCode: string = await this.generateActivationCode();
@@ -292,14 +292,14 @@ export default class UserManagementHelper {
 
                 /* Setup result */
                 result.success = true;
-                result.data = `${Lang.SUCCESSFULLYREGISTER}<br/>${Lang.PASSWORDSENDTOPHONENUMBER}`;
+                result.data = `${Lang.SUCCESS_FULLY_REGISTER}<br/>${Lang.PASSWORD_SEND_TO_PHONE_NUMBER}`;
 
                 // result.data = resetPassResult.data;
             } else {
-                result.data = Lang.INVALIDOTP;
+                result.data = Lang.INVALID_OTP;
             }
         } else {
-            result.data = Lang.INVALIDOTP;
+            result.data = Lang.INVALID_OTP;
         }
 
         return result;
@@ -325,7 +325,7 @@ export default class UserManagementHelper {
 
         const result = {
             success: data == null,
-            data: data == null ? "" : Lang.ALREADYREGISTEREDNATIONALID,
+            data: data == null ? "" : Lang.ALREADY_REGISTERED_NATIONALID,
         };
 
         return result;
@@ -359,7 +359,7 @@ export default class UserManagementHelper {
 
         const result = {
             success: data == null,
-            data: data == null ? "" : Lang.ALREADYREGISTEREDPHONENUMBER,
+            data: data == null ? "" : Lang.ALREADY_REGISTERED_PHONE_NUMBER,
         };
 
         return result;
@@ -391,7 +391,7 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess ? "" : Lang.INVALIDOTP,
+            data: tokenSuccess ? "" : Lang.INVALID_OTP,
         };
 
         return result;
@@ -425,7 +425,7 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess ? "" : Lang.INVALIDOTP,
+            data: tokenSuccess ? "" : Lang.INVALID_OTP,
         };
 
         return result;
