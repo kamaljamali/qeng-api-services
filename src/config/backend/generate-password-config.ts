@@ -1,5 +1,5 @@
 /**
- * Sms generate password
+ * generate password
  */
 export type GeneratePasswordConfigType = {
     length: 8;
