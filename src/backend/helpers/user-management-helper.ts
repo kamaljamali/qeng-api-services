@@ -108,7 +108,7 @@ export default class UserManagementHelper {
      */
     public static async loginByOtpToken(
         otpResponse: OtpResponseType,
-        otpPerfix: OtpPrefixEnum = OtpPrefixEnum.NONE
+        otpPerfix: OtpPrefixEnum = OtpPrefixEnum.LOGIN
     ): Promise<ActionResultType> {
         let result: ActionResultType;
 
