@@ -288,7 +288,7 @@ export default class UserManagementHelper {
                 /* Generate password */
                 let password: string = await GlobalHelper.generatePassword?.generatePassword();
                 console.log(password);
-                
+
                 const userData = {
                     name: otpData.userRegisterData.nationalId,
                     phone: otpData.userRegisterData.phoneNumber,
@@ -302,10 +302,10 @@ export default class UserManagementHelper {
                 const User: Model<IUserModel> = GlobalData.dbEngine.model(
                     "User"
                 );
-                const newUser: IUserModel = await User.create(userData);
+                await User.create(userData);
 
                 /* Delete otp-request from redis-db */
-                const delRedisData = await GlobalHelper.redisHelper?.runCmd(
+                await GlobalHelper.redisHelper?.runCmd(
                     "del",
                     `otp-request:${otpPerfix}:${otpResponse.token}`
                 );
@@ -431,6 +431,8 @@ export default class UserManagementHelper {
 
     /**
      * Check user activation code Register
+     * @param activationCodeData
+     * @param otpPerfix
      */
     public static async checkUserActivationCodeRegister(
         activationCodeData: OtpResponseType,
@@ -469,6 +471,7 @@ export default class UserManagementHelper {
 
     /**
      * Generate activation code
+     * @param digits
      */
     public static async generateActivationCode(
         digits: number = 6
@@ -508,10 +511,12 @@ export default class UserManagementHelper {
         const LoginHistory: Model<ILoginHistoryModel> = GlobalData.dbEngine.model(
             "LoginHistory"
         );
+
         const newLoginHistory: ILoginHistoryModel = await LoginHistory.create(
             historyData
         );
     }
+
     /**
      * save data in history by user data login
      */
@@ -534,10 +539,12 @@ export default class UserManagementHelper {
         const LoginHistory: Model<ILoginHistoryModel> = GlobalData.dbEngine.model(
             "LoginHistory"
         );
+
         const newLoginHistory: ILoginHistoryModel = await LoginHistory.create(
             historyData
         );
     }
+
     /**
      * save data in history by user data login
      */
