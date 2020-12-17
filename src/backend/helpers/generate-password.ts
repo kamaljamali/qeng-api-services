@@ -1,6 +1,6 @@
 import { GeneratePasswordConfigType } from "@Lib/types/config/generate-password-config-type";
 import GlobalMethods from "@Core/Global/global-methods";
-const PWDGenerator = require("generate-password");
+import PWDGenerator from "generate-password";
 
 /**
  * Generate Password Helper class
