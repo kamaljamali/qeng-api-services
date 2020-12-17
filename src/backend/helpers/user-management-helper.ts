@@ -3,18 +3,18 @@ import { v4 as UUIDv4 } from "uuid";
 import GlobalData from "@Core/Global/global-data";
 import GlobalHelper from "./global-helper";
 import { ActionResultType } from "@Lib/types/core/action-result-type";
-import { UserLoginDataType } from "@Lib/types/frontend/auth/user-login-data-type";
-import { UserLoginOtpType } from "@Lib/types/frontend/auth/user-login-otp-type";
+import { UserLoginDataType } from "@Lib/types/backend/auth/user-login-data-type";
+import { UserLoginOtpType } from "@Lib/types/backend/auth/user-login-otp-type";
 import { IUserModel } from "@BE/models/user-model";
-import { OtpResponseType } from "@Lib/types/frontend/auth/opt-response-type";
+import { OtpResponseType } from "@Lib/types/backend/auth/opt-response-type";
 import { OtpDataType } from "@Lib/types/backend/redis/opt-data-type";
-import { UserResetPasswordType } from "@Lib/types/frontend/auth/user-reset-password";
-import { UserRegisterType } from "@Lib/types/frontend/auth/user-register-type";
+import { UserResetPasswordType } from "@Lib/types/backend/auth/user-reset-password";
+import { UserRegisterType } from "@Lib/types/backend/auth/user-register-type";
 import { OtpRegisterDataType } from "@Lib/types/backend/redis/opt-register-data-type";
 import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
 import GlobalMethods from "@Core/Global/global-methods";
 import { SmsConfigType } from "@Lib/types/config/sms-config-type";
-import Lang from "@LANG/fa";
+import Lang from "@LANG/fa.json";
 
 /**
  * UserManagement Helper class

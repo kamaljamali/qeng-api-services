@@ -5,5 +5,4 @@ export enum CheckListItemStatusEnum {
     ACCEPTED = "ACCEPTED",
     REJECTED = "REJECTED",
     PENDING = "PENDING",
-  }
-  
+}

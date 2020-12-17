@@ -4,4 +4,4 @@
 export type RequestCityType = {
     countryCode: string;
     provinceCode: string;
-  };
+};

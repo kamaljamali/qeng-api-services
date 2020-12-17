@@ -1,16 +1,13 @@
-/**
- * generate password
- */
-export type GeneratePasswordConfigType = {
-    length: 8;
+export default {
+    length: 8,
 
-    numbers: true;
-    symbols: false;
-    lowercase: true;
-    uppercase: true;
-    excludeSimilarCharacters: false;
+    numbers: true,
+    symbols: false,
+    lowercase: true,
+    uppercase: true,
+    excludeSimilarCharacters: false,
 
-    exclude: "0olij ";
+    exclude: "0olij",
 
-    strict: false;
+    strict: false,
 };

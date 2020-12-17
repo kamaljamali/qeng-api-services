@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { UserLoginDataType } from "@Lib/types/frontend/auth/user-login-data-type";
-import { UserRegisterType } from "@Lib/types/frontend/auth/user-register-type";
+import { UserLoginDataType } from "@Lib/types/backend/auth/user-login-data-type";
+import { UserRegisterType } from "@Lib/types/backend/auth/user-register-type";
 import UserManagementHelper from "@BE/helpers/user-management-helper";
 import { ActionResultType } from "@Lib/types/core/action-result-type";
-import { UserLoginOtpType } from "@Lib/types/frontend/auth/user-login-otp-type";
-import { OtpResponseType } from "@Lib/types/frontend/auth/opt-response-type";
-import { UserResetPasswordType } from "@Lib/types/frontend/auth/user-reset-password";
+import { UserLoginOtpType } from "@Lib/types/backend/auth/user-login-otp-type";
+import { OtpResponseType } from "@Lib/types/backend/auth/opt-response-type";
+import { UserResetPasswordType } from "@Lib/types/backend/auth/user-reset-password";
 import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
 
 /**

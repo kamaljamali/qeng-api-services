@@ -7,6 +7,7 @@ const PWDGenerator = require("generate-password");
  */
 export default class GeneratePasswordHelper {
     private _config: GeneratePasswordConfigType = {} as GeneratePasswordConfigType;
+
     /**
      * Constructor
      */

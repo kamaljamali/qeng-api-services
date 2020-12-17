@@ -2,7 +2,7 @@
   "name": "sunset-iv",
   "version": "2.0.0",
   "description": "",
-  "main": "dist/server.js",
+  "main": "dist/src/server.js",
   "scripts": {
     "server:run": "cross-env node ./dist/src/server.js",
     "server:run:watch": "cross-env nodemon ./dist/src/server.js",
