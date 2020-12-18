@@ -39,12 +39,10 @@ export default class UserManagementHelper {
             this.saveHistoryUserDataLogin(data, "userdata", true);
         }
 
+        const success = data != null;
         const result = {
-            success: data != null,
-            data:
-                data != null
-                    ? GlobalData.router.routerManager.route("home.index")
-                    : GlobalHelper.__("YOUR_PASSWORD_IS"),
+            success,
+            data: success ? null : GlobalHelper.__("INVALID_NATIONALID_OR_PASSWORD"),
         };
 
         return result;
