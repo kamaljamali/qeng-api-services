@@ -19,8 +19,6 @@ export default class AuthRoute extends BaseRouter {
     private defineRoutes(): void {
         const controller: AuthController = new AuthController();
 
-        super.get("/login", [controller.login.bind(controller)], "auth.login");
-
         super.post(
             "/loginByUserData",
             [controller.loginByUserData.bind(controller)],

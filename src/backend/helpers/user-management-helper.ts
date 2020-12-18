@@ -44,7 +44,7 @@ export default class UserManagementHelper {
             data:
                 data != null
                     ? GlobalData.router.routerManager.route("home.index")
-                    : GlobalHelper.__(GlobalHelper.__Keys.YOUR_PASSWORD_IS),
+                    : GlobalHelper.__("YOUR_PASSWORD_IS"),
         };
 
         return result;
@@ -91,9 +91,7 @@ export default class UserManagementHelper {
             /* Send activation code to user */
             GlobalHelper.smsCenter?.sendSms(
                 user.phone,
-                `${GlobalHelper.__(GlobalHelper.__Keys.OTP)}:\n${
-                    otpResult.activationCode
-                }`
+                `${GlobalHelper.__("OTP")}:\n${otpResult.activationCode}`
             );
 
             result = {
@@ -103,9 +101,7 @@ export default class UserManagementHelper {
         } else {
             result = {
                 success: false,
-                data: GlobalHelper.__(
-                    GlobalHelper.__Keys.INVALID_NATIONALID_OR_PHONE_NUMBER
-                ),
+                data: GlobalHelper.__("INVALID_NATIONALID_OR_PHONE_NUMBER"),
             };
         }
 
@@ -150,7 +146,7 @@ export default class UserManagementHelper {
             success: loginSuccess,
             data: loginSuccess
                 ? GlobalData.router.routerManager.route("home.index")
-                : GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP),
+                : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;
@@ -205,7 +201,7 @@ export default class UserManagementHelper {
             success: operationResult,
             data: operationResult
                 ? GlobalData.router.routerManager.route("auth.login")
-                : GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP),
+                : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;
@@ -234,9 +230,7 @@ export default class UserManagementHelper {
         if (user) {
             result = {
                 success: false,
-                data: GlobalHelper.__(
-                    GlobalHelper.__Keys.ALREADY_REGISTER_USER
-                ),
+                data: GlobalHelper.__("ALREADY_REGISTER_USER"),
             };
         } else {
             const activationCode: string = await this.generateActivationCode();
@@ -259,7 +253,7 @@ export default class UserManagementHelper {
             /* Send activation code to user */
             GlobalHelper.smsCenter?.sendSms(
                 otpRegisterResult.userRegisterData.phoneNumber,
-                `${GlobalHelper.__(GlobalHelper.__Keys.OTP)}:\n${
+                `${GlobalHelper.__("OTP")}:\n${
                     otpRegisterResult.activationCode
                 }`
             );
@@ -323,23 +317,19 @@ export default class UserManagementHelper {
                 /* Send activation code to user */
                 GlobalHelper.smsCenter?.sendSms(
                     userData.phone,
-                    `${GlobalHelper.__(
-                        GlobalHelper.__Keys.YOUR_PASSWORD_IS
-                    )}:\n${password}`
+                    `${GlobalHelper.__("YOUR_PASSWORD_IS")}:\n${password}`
                 );
 
                 /* Setup result */
                 result.success = true;
                 result.data = `${GlobalHelper.__(
-                    GlobalHelper.__Keys.SUCCESS_FULLY_REGISTER
-                )}<br/>${GlobalHelper.__(
-                    GlobalHelper.__Keys.PASSWORD_SEND_TO_PHONE_NUMBER
-                )}`;
+                    "SUCCESS_FULLY_REGISTER"
+                )}<br/>${GlobalHelper.__("PASSWORD_SEND_TO_PHONE_NUMBER")}`;
             } else {
-                result.data = GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP);
+                result.data = GlobalHelper.__("INVALID_OTP");
             }
         } else {
-            result.data = GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP);
+            result.data = GlobalHelper.__("INVALID_OTP");
         }
 
         return result;
@@ -368,9 +358,7 @@ export default class UserManagementHelper {
             data:
                 data == null
                     ? ""
-                    : GlobalHelper.__(
-                          GlobalHelper.__Keys.ALREADY_REGISTERED_NATIONALID
-                      ),
+                    : GlobalHelper.__("ALREADY_REGISTERED_NATIONALID"),
         };
 
         return result;
@@ -407,9 +395,7 @@ export default class UserManagementHelper {
             data:
                 data == null
                     ? ""
-                    : GlobalHelper.__(
-                          GlobalHelper.__Keys.ALREADY_REGISTERED_PHONE_NUMBER
-                      ),
+                    : GlobalHelper.__("ALREADY_REGISTERED_PHONE_NUMBER"),
         };
 
         return result;
@@ -447,9 +433,7 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess
-                ? ""
-                : GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP),
+            data: tokenSuccess ? "" : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;
@@ -489,9 +473,7 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess
-                ? ""
-                : GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP),
+            data: tokenSuccess ? "" : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;

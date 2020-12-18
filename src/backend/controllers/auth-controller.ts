@@ -13,20 +13,6 @@ import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
  */
 export default class AuthController {
     /**
-     * Auth/login action
-     * @param req Express.Request Request
-     * @param res Express.Response Response
-     * @param next Express.NextFunction next function
-     */
-    public async login(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        res.render("pages/auth/login.pug");
-    }
-
-    /**
      * Auth/login-by-user-data action
      * @param req Express.Request Request
      * @param res Express.Response Response
