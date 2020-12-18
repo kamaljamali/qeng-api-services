@@ -5,86 +5,86 @@ import BaseRouter from "@Core/Helpers/base-router-helper";
  * Auth router
  */
 export default class AuthRoute extends BaseRouter {
-  private authController: AuthController = new AuthController();
+    /**
+     * Constructor
+     */
+    constructor() {
+        super("/auth", "AuthRoute");
+        this.defineRoutes();
+    }
 
-  /**
-   * Constructor
-   */
-  constructor() {
-    super("/auth", "AuthRoute");
-    this.defineRoutes();
-  }
+    /**
+     * Define routes
+     */
+    private defineRoutes(): void {
+        const controller: AuthController = new AuthController();
 
-  /**
-   * Define routes
-   */
-  private defineRoutes(): void {
-    super.get("/login", [this.authController.login], "auth.login");
+        super.get("/login", [controller.login.bind(controller)], "auth.login");
 
-    super.post(
-      "/loginByUserData",
-      [this.authController.loginByUserData],
-      "auth.login-by-user-data"
-    );
+        super.post(
+            "/loginByUserData",
+            [controller.loginByUserData.bind(controller)],
+            "auth.login-by-user-data"
+        );
 
-    super.post(
-      "/requestOtpToken",
-      [this.authController.requestOtpToken],
-      "auth.request-otp-token"
-    );
+        super.post(
+            "/requestOtpToken",
+            [controller.requestOtpToken.bind(controller)],
+            "auth.request-otp-token"
+        );
 
-    super.post(
-      "/loginByOtpToken",
-      [this.authController.loginByOtpToken],
-      "auth.login-by-otp-token"
-    );
+        super.post(
+            "/loginByOtpToken",
+            [controller.loginByOtpToken.bind(controller)],
+            "auth.login-by-otp-token"
+        );
 
-    super.post(
-      "/requestForgetPasswordToken",
-      [this.authController.requestForgetPasswordToken],
-      "auth.request-forget-password-token"
-    );
+        super.post(
+            "/requestForgetPasswordToken",
+            [controller.requestForgetPasswordToken.bind(controller)],
+            "auth.request-forget-password-token"
+        );
 
-    super.post(
-      "/resetPassword",
-      [this.authController.resetPassword],
-      "auth.reset-password"
-    );
+        super.post(
+            "/resetPassword",
+            [controller.resetPassword.bind(controller)],
+            "auth.reset-password"
+        );
 
-    super.post(
-      "/checkUserNationalId",
-      [this.authController.checkUserNationalId],
-      "auth.check-user-national-id"
-    );
+        super.post(
+            "/checkUserNationalId",
+            [controller.checkUserNationalId.bind(controller)],
+            "auth.check-user-national-id"
+        );
 
-    super.post(
-      "/checkUserPhoneNumber",
-      [this.authController.checkUserPhoneNumber],
-      "auth.check-user-phone-number"
-    );
+        super.post(
+            "/checkUserPhoneNumber",
+            [controller.checkUserPhoneNumber.bind(controller)],
+            "auth.check-user-phone-number"
+        );
 
-    super.post(
-      "/newUserRegisterRequest",
-      [this.authController.newUserRegisterRequest],
-      "auth.new-user-register-request"
-    );
+        super.post(
+            "/newUserRegisterRequest",
+            [controller.newUserRegisterRequest.bind(controller)],
+            "auth.new-user-register-request"
+        );
 
-    super.post(
-      "/confirmNewUserRegister",
-      [this.authController.confirmNewUserRegister],
-      "auth.confirm-new-user-register"
-    );
+        super.post(
+            "/confirmNewUserRegister",
+            [controller.confirmNewUserRegister.bind(controller)],
+            "auth.confirm-new-user-register"
+        );
 
-    super.post(
-      "/checkUserActivationCodeRsesetPassword",
-      [this.authController.checkUserActivationCodeResetPassword],
-      "auth.check-user-activation-code-reset-password"
-    );
+        super.post(
+            "/checkUserActivationCodeRsesetPassword",
+            [controller.checkUserActivationCodeResetPassword.bind(controller)],
+            "auth.check-user-activation-code-reset-password"
+        );
 
-    super.post(
-      "/checkUserActivationCodeRegister",
-      [this.authController.checkUserActivationCodeRegister],
-      "auth.check-user-activation-code-register"
-    );
-  }
+        super.post(
+            "/checkUserActivationCodeRegister",
+            [controller.checkUserActivationCodeRegister.bind(controller)],
+            "auth.check-user-activation-code-register"
+        );
+    }
 }

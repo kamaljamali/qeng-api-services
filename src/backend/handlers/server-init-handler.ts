@@ -4,7 +4,7 @@ import IEventHandler from "@Lib/interfaces/core/event-handler-interface";
 import RedisHelper from "@BE/helpers/redis-helper";
 import GlobalHelper from "@BE/helpers/global-helper";
 import SmsCenter from "@BE/helpers/sms-center";
-import GeneratePassword from "@BE/helpers/generate-password";
+import GeneratePassword from "@BE/helpers/generate-password-helper";
 
 /**
  * Server-init handler
@@ -39,6 +39,7 @@ export default class ServerInitHandler implements IEventHandler {
                 this.getEventName()
             )} handler initialized successfully\n\t${payload.readyAt}`
         );
+
         this.initServerHelper();
     }
 

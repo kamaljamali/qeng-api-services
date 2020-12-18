@@ -12,14 +12,9 @@ import { UserResetPasswordType } from "@Lib/types/backend/auth/user-reset-passwo
 import { UserRegisterType } from "@Lib/types/backend/auth/user-register-type";
 import { OtpRegisterDataType } from "@Lib/types/backend/redis/opt-register-data-type";
 import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
-import GlobalMethods from "@Core/Global/global-methods";
 import { SmsConfigType } from "@Lib/types/config/sms-config-type";
-<<<<<<< HEAD
-import Lang from "@LANG/fa.json";
-=======
-import FA from "@LANG/fa";
 import { ILoginHistoryModel } from "@BE/models/user-login-history-model";
->>>>>>> main
+import GlobalMethods from "@Core/Global/global-methods";
 
 /**
  * UserManagement Helper class
@@ -37,7 +32,7 @@ export default class UserManagementHelper {
         const UserModel: Model<IUserModel> = GlobalData.dbEngine.model("User");
         const data = await UserModel.findOne({
             name: userData.nationalId,
-            pwd: await this.encryptPassword(userData.password),
+            pwd: userData.password,
         });
 
         if (null != data) {
@@ -49,7 +44,7 @@ export default class UserManagementHelper {
             data:
                 data != null
                     ? GlobalData.router.routerManager.route("home.index")
-                    : FA.INVALID_NATIONALID_OR_PASSWORD,
+                    : GlobalHelper.__(GlobalHelper.__Keys.YOUR_PASSWORD_IS),
         };
 
         return result;
@@ -57,6 +52,8 @@ export default class UserManagementHelper {
 
     /**
      * Request OTP token
+     * @param requestData UserLoginOtpType userLogin data
+     * @param otpPerfix  OtpPerfixEnum Perfix enum
      */
     public static async requestOtpToken(
         requestData: UserLoginOtpType,
@@ -94,7 +91,9 @@ export default class UserManagementHelper {
             /* Send activation code to user */
             GlobalHelper.smsCenter?.sendSms(
                 user.phone,
-                `${FA.OTP}:\n${otpResult.activationCode}`
+                `${GlobalHelper.__(GlobalHelper.__Keys.OTP)}:\n${
+                    otpResult.activationCode
+                }`
             );
 
             result = {
@@ -104,7 +103,9 @@ export default class UserManagementHelper {
         } else {
             result = {
                 success: false,
-                data: FA.INVALID_NATIONALID_OR_PHONE_NUMBER,
+                data: GlobalHelper.__(
+                    GlobalHelper.__Keys.INVALID_NATIONALID_OR_PHONE_NUMBER
+                ),
             };
         }
 
@@ -112,7 +113,7 @@ export default class UserManagementHelper {
     }
 
     /**
-     *
+     * Login by OtpToken
      * @param otpResponse OtpResponseType OTP Response data
      */
     public static async loginByOtpToken(
@@ -140,7 +141,8 @@ export default class UserManagementHelper {
                     `otp-request:${otpPerfix}:${otpResponse.token}`
                 );
             }
-            /**********save history data in db********* */
+
+            /* Save history data in db */
             this.saveHistoryOtpLogin(optData, "otp", loginSuccess);
         }
 
@@ -148,7 +150,7 @@ export default class UserManagementHelper {
             success: loginSuccess,
             data: loginSuccess
                 ? GlobalData.router.routerManager.route("home.index")
-                : FA.INVALID_OTP,
+                : GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP),
         };
 
         return result;
@@ -185,9 +187,7 @@ export default class UserManagementHelper {
                 });
 
                 if (user) {
-                    user.pwd = await this.encryptPassword(
-                        otpResponse.newPassword
-                    );
+                    user.pwd = otpResponse.newPassword;
                     await user.save();
 
                     operationResult = true;
@@ -205,7 +205,7 @@ export default class UserManagementHelper {
             success: operationResult,
             data: operationResult
                 ? GlobalData.router.routerManager.route("auth.login")
-                : FA.INVALID_OTP,
+                : GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP),
         };
 
         return result;
@@ -213,6 +213,8 @@ export default class UserManagementHelper {
 
     /**
      * Request OTP token register
+     * @param newUserData UserRegisterType user data
+     * @param otpPerfix OtpPerfixEnum OtpData
      */
     public static async requestOtpTokenRegister(
         newUserData: UserRegisterType,
@@ -232,7 +234,9 @@ export default class UserManagementHelper {
         if (user) {
             result = {
                 success: false,
-                data: FA.ALREADY_REGISTER_USER,
+                data: GlobalHelper.__(
+                    GlobalHelper.__Keys.ALREADY_REGISTER_USER
+                ),
             };
         } else {
             const activationCode: string = await this.generateActivationCode();
@@ -255,7 +259,9 @@ export default class UserManagementHelper {
             /* Send activation code to user */
             GlobalHelper.smsCenter?.sendSms(
                 otpRegisterResult.userRegisterData.phoneNumber,
-                `${FA.OTP}:\n${otpRegisterResult.activationCode}`
+                `${GlobalHelper.__(GlobalHelper.__Keys.OTP)}:\n${
+                    otpRegisterResult.activationCode
+                }`
             );
 
             result = {
@@ -298,7 +304,7 @@ export default class UserManagementHelper {
                     phone: otpData.userRegisterData.phoneNumber,
                     first_name: otpData.userRegisterData.firstName,
                     last_name: otpData.userRegisterData.lastName,
-                    pwd: await this.encryptPassword(password),
+                    pwd: password,
                     activated_at: new Date(),
                 };
 
@@ -317,19 +323,23 @@ export default class UserManagementHelper {
                 /* Send activation code to user */
                 GlobalHelper.smsCenter?.sendSms(
                     userData.phone,
-                    `${FA.YOUR_PASSWORD_IS}:\n${password}`
+                    `${GlobalHelper.__(
+                        GlobalHelper.__Keys.YOUR_PASSWORD_IS
+                    )}:\n${password}`
                 );
 
                 /* Setup result */
                 result.success = true;
-                result.data = `${FA.SUCCESS_FULLY_REGISTER}<br/>${FA.PASSWORD_SEND_TO_PHONE_NUMBER}`;
-
-                // result.data = resetPassResult.data;
+                result.data = `${GlobalHelper.__(
+                    GlobalHelper.__Keys.SUCCESS_FULLY_REGISTER
+                )}<br/>${GlobalHelper.__(
+                    GlobalHelper.__Keys.PASSWORD_SEND_TO_PHONE_NUMBER
+                )}`;
             } else {
-                result.data = FA.INVALID_OTP;
+                result.data = GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP);
             }
         } else {
-            result.data = FA.INVALID_OTP;
+            result.data = GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP);
         }
 
         return result;
@@ -355,7 +365,12 @@ export default class UserManagementHelper {
 
         const result = {
             success: data == null,
-            data: data == null ? "" : FA.ALREADY_REGISTERED_NATIONALID,
+            data:
+                data == null
+                    ? ""
+                    : GlobalHelper.__(
+                          GlobalHelper.__Keys.ALREADY_REGISTERED_NATIONALID
+                      ),
         };
 
         return result;
@@ -389,7 +404,12 @@ export default class UserManagementHelper {
 
         const result = {
             success: data == null,
-            data: data == null ? "" : FA.ALREADY_REGISTERED_PHONE_NUMBER,
+            data:
+                data == null
+                    ? ""
+                    : GlobalHelper.__(
+                          GlobalHelper.__Keys.ALREADY_REGISTERED_PHONE_NUMBER
+                      ),
         };
 
         return result;
@@ -427,7 +447,9 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess ? "" : FA.INVALID_OTP,
+            data: tokenSuccess
+                ? ""
+                : GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP),
         };
 
         return result;
@@ -467,7 +489,9 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess ? "" : FA.INVALID_OTP,
+            data: tokenSuccess
+                ? ""
+                : GlobalHelper.__(GlobalHelper.__Keys.INVALID_OTP),
         };
 
         return result;
@@ -544,21 +568,6 @@ export default class UserManagementHelper {
             "LoginHistory"
         );
 
-        const newLoginHistory: ILoginHistoryModel = await LoginHistory.create(
-            historyData
-        );
-    }
-
-    /**
-     * save data in history by user data login
-     */
-    public static async encryptPassword(password: string): Promise<string> {
-        const crypto = require("crypto");
-
-        let mykey = crypto.createCipher("aes-128-cbc", password);
-        let mystr = mykey.update("abc", "utf8", "hex");
-        mystr += mykey.final("hex");
-
-        return mystr;
+        await LoginHistory.create(historyData);
     }
 }

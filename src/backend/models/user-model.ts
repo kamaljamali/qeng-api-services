@@ -11,6 +11,7 @@ import {
 import { yellow } from "chalk";
 import IDBModel from "@Lib/interfaces/core/db-model-interface";
 import GlobalData from "@Core/Global/global-data";
+import GeneratePasswordHelper from "@BE/helpers/generate-password-helper";
 
 /**
  * User model interface
@@ -104,12 +105,24 @@ export default class UserModel implements IDBModel {
         };
 
         /* Define schmea */
-        const schema: Schema = new Schema(schemaDef, {
+        const schema: Schema = new Schema<IUserModel>(schemaDef, {
             timestamps: {
                 createdAt: "created_at",
                 updatedAt: "updated_at",
             } as SchemaTimestampsConfig,
         } as SchemaOptions);
+
+        /* PreSchema */
+        schema.pre("save", async function (next) {
+            if (!this.isModified("pwd")) {
+                return next();
+            }
+
+            const user: IUserModel = this as IUserModel;
+            user.pwd = await GeneratePasswordHelper.encryptPassword(user.pwd);
+
+            next();
+        });
 
         /* Methods */
         schema.methods.changePwd = async function changePwd(

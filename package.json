@@ -4,6 +4,12 @@
   "description": "",
   "main": "dist/src/server.js",
   "scripts": {
+    "sr": "npm run server:run",
+    "srw": "npm run server:run:watch",
+    "sd": "npm run server:dev",
+    "sdw": "npm run server:dev:watch",
+    "sp": "npm run server:prod",
+    "w": "npm run watch",
     "server:run": "cross-env node ./dist/src/server.js",
     "server:run:watch": "cross-env nodemon ./dist/src/server.js",
     "server:dev": "cross-env ttsc --p ./tsconfig/tsconfig.dev.json",

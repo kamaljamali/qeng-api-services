@@ -32,4 +32,17 @@ export default class GeneratePasswordHelper {
 
         return password;
     }
+
+    /**
+     * Save data in history by user data login
+     */
+    public static async encryptPassword(password: string): Promise<string> {
+        const crypto = require("crypto");
+
+        let mykey = crypto.createCipher("aes-128-cbc", password);
+        let mystr = mykey.update("abc", "utf8", "hex");
+        mystr += mykey.final("hex");
+
+        return mystr;
+    }
 }
