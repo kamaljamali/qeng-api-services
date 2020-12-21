@@ -1,8 +1,8 @@
 /**
-   * User login data type
-   */
+ * User login data type
+ */
 export type UserLoginDataType = {
-  nationalId: string;
-  password: string;
-  captcha?: string;
+    nationalId: string;
+    password: string;
+    captcha?: string;
 };

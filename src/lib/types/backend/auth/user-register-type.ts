@@ -6,5 +6,4 @@ export type UserRegisterType = {
     lastName: string;
     nationalId: string;
     phoneNumber: string;
-  };
-  
+};

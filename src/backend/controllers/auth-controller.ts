@@ -13,20 +13,6 @@ import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
  */
 export default class AuthController {
     /**
-     * Auth/login action
-     * @param req Express.Request Request
-     * @param res Express.Response Response
-     * @param next Express.NextFunction next function
-     */
-    public async login(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        res.render("pages/auth/login.pug");
-    }
-
-    /**
      * Auth/login-by-user-data action
      * @param req Express.Request Request
      * @param res Express.Response Response
@@ -135,7 +121,7 @@ export default class AuthController {
      * @param res Express.Response Response
      * @param next Express.NextFunction next function
      */
-    public async checkUserNationalId(
+    public async checkNationalId(
         req: Request,
         res: Response,
         next: NextFunction
@@ -155,7 +141,7 @@ export default class AuthController {
      * @param res Express.Response Response
      * @param next Express.NextFunction next function
      */
-    public async checkUserPhoneNumber(
+    public async checkPhoneNumber(
         req: Request,
         res: Response,
         next: NextFunction
@@ -175,7 +161,7 @@ export default class AuthController {
      * @param res Express.Response Response
      * @param next Express.NextFunction next function
      */
-    public async newUserRegisterRequest(
+    public async userRegisterRequest(
         req: Request,
         res: Response,
         next: NextFunction
@@ -214,7 +200,7 @@ export default class AuthController {
      * @param res Express.Response Response
      * @param next Express.NextFunction next function
      */
-    public async confirmNewUserRegister(
+    public async confirmUserRegistration(
         req: Request,
         res: Response,
         next: NextFunction
@@ -235,7 +221,7 @@ export default class AuthController {
      * @param res Express.Response Response
      * @param next Express.NextFunction next function
      */
-    public async checkUserActivationCodeResetPassword(
+    public async checkResetPasswordActivationCode(
         req: Request,
         res: Response,
         next: NextFunction
@@ -256,7 +242,7 @@ export default class AuthController {
      * @param res Express.Response Response
      * @param next Express.NextFunction next function
      */
-    public async checkUserActivationCodeRegister(
+    public async checkRegisterActivationCode(
         req: Request,
         res: Response,
         next: NextFunction
