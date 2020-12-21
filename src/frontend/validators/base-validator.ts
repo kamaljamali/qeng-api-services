@@ -24,11 +24,11 @@ export default class BaseValidator {
         /* Preparation */
         const validatorJS: ValidatorJs.Validator<T> = new ValidatorJs(
             data,
-            validator.getRules(),
-            validator.getMessages()
+            validator.getRules(data),
+            validator.getMessages(data)
         );
         validator.setup<T>(validatorJS);
-        validatorJS.setAttributeNames(validator.getAttributes());
+        validatorJS.setAttributeNames(validator.getAttributes(data));
 
         /* Check */
         result.success = true == validatorJS.passes();
