@@ -1,9 +1,10 @@
 import { Logform, createLogger, format, transports } from "winston";
-import * as winstonDailyRotateFile from "winston-daily-rotate-file";
+import "winston-daily-rotate-file";
 import GlobalMethods from "@Core/Global/global-methods";
 import LoggerConfig from "@Config/core/logger-config";
 import { ICoreModule } from "@Lib/interfaces/core/core-module-interface";
 import BaseModule from "./base-module";
+import { DailyRotateFileTransportOptions } from "winston-daily-rotate-file";
 
 /**
  * Logger class
@@ -72,8 +73,8 @@ export default class LoggerModule extends BaseModule implements ICoreModule {
         let logPath = LoggerConfig.logFolder;
         GlobalMethods.createDir(logPath);
 
-        this.logsFilename = GlobalMethods.rPath(logPath, "logs.log");
-        this.errorFilename = GlobalMethods.rPath(logPath, "errors.log");
+        this.logsFilename = GlobalMethods.rPath(logPath, "logs");
+        this.errorFilename = GlobalMethods.rPath(logPath, "errors");
     }
 
     /**
@@ -108,28 +109,28 @@ export default class LoggerModule extends BaseModule implements ICoreModule {
         if (GlobalMethods.isProductionMode()) {
             transportsList.push(
                 new transports.DailyRotateFile({
-                    filename: "errors-%DATE%.log",
+                    filename: `${this.errorFilename}-%DATE%.log`,
                     datePattern: "YYYY-MM-DD-HH",
                     zippedArchive: true,
                     maxSize: LoggerConfig.maxSize,
                     maxFiles: LoggerConfig.maxFiles,
                     level: "error",
-                }),
+                } as DailyRotateFileTransportOptions),
                 new transports.DailyRotateFile({
                     filename: `${this.logsFilename}-%DATE%.log`,
                     datePattern: "YYYY-MM-DD-HH",
                     zippedArchive: true,
                     maxSize: LoggerConfig.maxSize,
                     maxFiles: LoggerConfig.maxFiles,
-                })
+                } as DailyRotateFileTransportOptions)
             );
         } else {
             transportsList.push(
                 new transports.File({
-                    filename: this.errorFilename,
+                    filename: `${this.errorFilename}.log`,
                     level: "error",
                 }),
-                new transports.File({ filename: this.logsFilename }),
+                new transports.File({ filename: `${this.logsFilename}.log` }),
 
                 /* Print to console */
                 new transports.Console({

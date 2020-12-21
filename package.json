@@ -7,7 +7,7 @@
         "sr": "cross-env node ./dist/src/server.js",
         "srw": "cross-env nodemon ./dist/src/server.js",
         "sd": "cross-env ttsc --p ./tsconfig/tsconfig.dev.json",
-        "sdw": "npm run server:dev -- -w",
+        "sdw": "npm run sd -- -w",
         "sp": "cross-env ttsc --p ./tsconfig/tsconfig.prod.json",
         "w": "npm run dev -- --watch",
         "d": "npm run build -- --env DEVELOPMENT",
