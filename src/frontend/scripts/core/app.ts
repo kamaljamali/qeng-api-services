@@ -7,42 +7,42 @@ import Base from "./base";
  * App class
  */
 export class App extends Base {
-  private routesData: RouteFileType = {} as RouteFileType;
+    private routesData: RouteFileType = {} as RouteFileType;
 
-  /**
-   * Constructor
-   */
-  constructor() {
-    super();
+    /**
+     * Constructor
+     */
+    constructor() {
+        super();
 
-    import("@PUBLIC/router-manifest.json").then((res) => {
-      this.routesData = res.default || res;
-    });
-  }
-
-  /**
-   * Get a route data
-   * @param name string Route name
-   */
-  public route(name: string): RouteItemType {
-    const route: RouteItemType = this.routesData.routes[name];
-
-    if (undefined == route) {
-      throw new Error("Route not found");
+        import("@PUBLIC/router-manifest.json").then((res) => {
+            this.routesData = res.default || res;
+        });
     }
 
-    return route;
-  }
+    /**
+     * Get a route data
+     * @param name string Route name
+     */
+    public route(name: string): RouteItemType {
+        const route: RouteItemType = this.routesData.routes[name];
 
-  /**
-   * Get a route path
-   * @param name string Route name
-   */
-  public routePath(name: string, args: IHash<string> = {}): string {
-    const route: RouteItemType = this.route(name);
+        if (undefined == route) {
+            throw new Error("Route not found");
+        }
 
-    return RouterHelper.getRoute(route, args, this.routesData.url);
-  }
+        return route;
+    }
+
+    /**
+     * Get a route path
+     * @param name string Route name
+     */
+    public routePath(name: string, args: IHash<string> = {}): string {
+        const route: RouteItemType = this.route(name);
+
+        return RouterHelper.getRoute(route, args, this.routesData.url);
+    }
 }
 
 export default new App();

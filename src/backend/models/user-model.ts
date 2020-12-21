@@ -1,7 +1,7 @@
 import {
     Document,
-    Model,
     Mongoose,
+    Model,
     Schema,
     SchemaDefinition,
     SchemaOptions,

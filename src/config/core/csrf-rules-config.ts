@@ -1,3 +1,3 @@
 export default {
-  ignoreList: ["^/api/"],
+    ignoreList: ["^/api/"],
 };

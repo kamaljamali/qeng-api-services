@@ -7,38 +7,38 @@ import BaseModule from "./base-module";
  * EnvModule class
  */
 export default class EnvModule extends BaseModule implements ICoreModule {
-  /**
-   * EnvModule factory
-   */
-  public static createModule(): EnvModule {
-    return new EnvModule();
-  }
+    /**
+     * EnvModule factory
+     */
+    public static createModule(): EnvModule {
+        return new EnvModule();
+    }
 
-  /**
-   * Get module name
-   */
-  public getModuleName(): string {
-    return "Env";
-  }
+    /**
+     * Get module name
+     */
+    public getModuleName(): string {
+        return "Env";
+    }
 
-  /**
-   * Boot method
-   * @param payload object Payload object
-   */
-  public async boot(payload?: any): Promise<void> {
-    await this.loadEnvData();
-  }
+    /**
+     * Boot method
+     * @param payload object Payload object
+     */
+    public async boot(payload?: any): Promise<void> {
+        await this.loadEnvData();
+    }
 
-  /**
-   * Loding env-file data
-   */
-  private async loadEnvData(): Promise<void> {
-    const envFile: string = await GlobalMethods.config<string>(
-      "core/server",
-      "envFile"
-    );
-    const envFilePath = GlobalMethods.rPath(envFile);
+    /**
+     * Loding env-file data
+     */
+    private async loadEnvData(): Promise<void> {
+        const envFile: string = await GlobalMethods.config<string>(
+            "core/server",
+            "envFile"
+        );
+        const envFilePath = GlobalMethods.rPath(envFile);
 
-    config({ path: envFilePath });
-  }
+        config({ path: envFilePath });
+    }
 }
