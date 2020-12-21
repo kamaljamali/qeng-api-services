@@ -35,12 +35,6 @@ export default class Bootstap {
         await this.initEnvData();
         await this.initDebugger();
         await this.initLogger();
-
-        (async () => {
-            for (let i = 0; i < 99999; ++i) {
-                GlobalData.logger.error("ERRROROROR" + i);
-            }
-        })();
     }
 
     /**
