@@ -166,24 +166,25 @@ export default class AuthController {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        const userData: UserRegisterType = req.body as UserRegisterType;
+        let userData: UserRegisterType = req.body as UserRegisterType;
+        userData = JSON.parse(JSON.stringify(userData)) as UserRegisterType;
 
-        const temp = JSON.parse(JSON.stringify(userData));
-        /***************Check NationalId*************** */
+        /* Check nationalId */
         const flagNID: ActionResultType = await UserManagementHelper.checkUserNationalId(
-            temp.nationalId
+            userData.nationalId
         );
+
         if (!flagNID.success) {
             res.status(200).send(flagNID).end();
         } else {
-            /***************Check Phone Number************* */
+            /* Check Phone Number */
             const flagPhone: ActionResultType = await UserManagementHelper.checkUserPhoneNumber(
-                temp.phoneNumber
+                userData.phoneNumber
             );
+
             if (!flagPhone.success) {
                 res.status(200).send(flagPhone).end();
             } else {
-                /********************************************** */
                 const result: ActionResultType = await UserManagementHelper.requestOtpTokenRegister(
                     userData,
                     OtpPrefixEnum.REGISTER

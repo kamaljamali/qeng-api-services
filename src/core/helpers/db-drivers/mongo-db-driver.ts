@@ -104,6 +104,8 @@ export default class MongoDbDriver implements DatabaseDriverInterface {
             if (config.name) {
                 connectionString += `/${config.name}`;
             }
+        } else {
+            connectionString = "mongodb://localhost:27017;";
         }
 
         return connectionString;

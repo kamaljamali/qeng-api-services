@@ -12,9 +12,9 @@ import { UserResetPasswordType } from "@Lib/types/backend/auth/user-reset-passwo
 import { UserRegisterType } from "@Lib/types/backend/auth/user-register-type";
 import { OtpRegisterDataType } from "@Lib/types/backend/redis/opt-register-data-type";
 import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
-import GlobalMethods from "@Core/Global/global-methods";
 import { SmsConfigType } from "@Lib/types/config/sms-config-type";
-import Lang from "@LANG/fa.json";
+import { ILoginHistoryModel } from "@BE/models/user-login-history-model";
+import GlobalMethods from "@Core/Global/global-methods";
 
 /**
  * UserManagement Helper class
@@ -35,12 +35,14 @@ export default class UserManagementHelper {
             pwd: userData.password,
         });
 
+        if (null != data) {
+            this.saveHistoryUserDataLogin(data, "userdata", true);
+        }
+
+        const success = data != null;
         const result = {
-            success: data != null,
-            data:
-                data != null
-                    ? GlobalData.router.routerManager.route("home.index")
-                    : Lang.INVALID_NATIONALID_OR_PASSWORD,
+            success,
+            data: success ? null : GlobalHelper.__("INVALID_NATIONALID_OR_PASSWORD"),
         };
 
         return result;
@@ -48,6 +50,8 @@ export default class UserManagementHelper {
 
     /**
      * Request OTP token
+     * @param requestData UserLoginOtpType userLogin data
+     * @param otpPerfix  OtpPerfixEnum Perfix enum
      */
     public static async requestOtpToken(
         requestData: UserLoginOtpType,
@@ -85,7 +89,7 @@ export default class UserManagementHelper {
             /* Send activation code to user */
             GlobalHelper.smsCenter?.sendSms(
                 user.phone,
-                `${Lang.OTP}:\n${otpResult.activationCode}`
+                `${GlobalHelper.__("OTP")}:\n${otpResult.activationCode}`
             );
 
             result = {
@@ -95,7 +99,7 @@ export default class UserManagementHelper {
         } else {
             result = {
                 success: false,
-                data: Lang.INVALID_NATIONALID_OR_PHONE_NUMBER,
+                data: GlobalHelper.__("INVALID_NATIONALID_OR_PHONE_NUMBER"),
             };
         }
 
@@ -103,7 +107,7 @@ export default class UserManagementHelper {
     }
 
     /**
-     *
+     * Login by OtpToken
      * @param otpResponse OtpResponseType OTP Response data
      */
     public static async loginByOtpToken(
@@ -122,22 +126,25 @@ export default class UserManagementHelper {
 
         if (redisData) {
             const optData: OtpDataType = JSON.parse(redisData);
-
             if (optData.activationCode == otpResponse.activationCode) {
                 loginSuccess = true;
+
                 /* Delete otp-request from redis-db */
                 const delRedisData = await GlobalHelper.redisHelper?.runCmd(
                     "del",
                     `otp-request:${otpPerfix}:${otpResponse.token}`
                 );
             }
+
+            /* Save history data in db */
+            this.saveHistoryOtpLogin(optData, "otp", loginSuccess);
         }
 
         result = {
             success: loginSuccess,
             data: loginSuccess
                 ? GlobalData.router.routerManager.route("home.index")
-                : Lang.INVALID_OTP,
+                : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;
@@ -192,7 +199,7 @@ export default class UserManagementHelper {
             success: operationResult,
             data: operationResult
                 ? GlobalData.router.routerManager.route("auth.login")
-                : Lang.INVALID_OTP,
+                : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;
@@ -200,6 +207,8 @@ export default class UserManagementHelper {
 
     /**
      * Request OTP token register
+     * @param newUserData UserRegisterType user data
+     * @param otpPerfix OtpPerfixEnum OtpData
      */
     public static async requestOtpTokenRegister(
         newUserData: UserRegisterType,
@@ -219,7 +228,7 @@ export default class UserManagementHelper {
         if (user) {
             result = {
                 success: false,
-                data: Lang.ALREADY_REGISTER_USER,
+                data: GlobalHelper.__("ALREADY_REGISTER_USER"),
             };
         } else {
             const activationCode: string = await this.generateActivationCode();
@@ -242,7 +251,9 @@ export default class UserManagementHelper {
             /* Send activation code to user */
             GlobalHelper.smsCenter?.sendSms(
                 otpRegisterResult.userRegisterData.phoneNumber,
-                `${Lang.OTP}:\n${otpRegisterResult.activationCode}`
+                `${GlobalHelper.__("OTP")}:\n${
+                    otpRegisterResult.activationCode
+                }`
             );
 
             result = {
@@ -278,6 +289,7 @@ export default class UserManagementHelper {
             if (otpData.activationCode == otpResponse.activationCode) {
                 /* Generate password */
                 let password: string = await GlobalHelper.generatePassword?.generatePassword();
+                console.log(password);
 
                 const userData = {
                     name: otpData.userRegisterData.nationalId,
@@ -292,10 +304,10 @@ export default class UserManagementHelper {
                 const User: Model<IUserModel> = GlobalData.dbEngine.model(
                     "User"
                 );
-                const newUser: IUserModel = await User.create(userData);
+                await User.create(userData);
 
                 /* Delete otp-request from redis-db */
-                const delRedisData = await GlobalHelper.redisHelper?.runCmd(
+                await GlobalHelper.redisHelper?.runCmd(
                     "del",
                     `otp-request:${otpPerfix}:${otpResponse.token}`
                 );
@@ -303,19 +315,19 @@ export default class UserManagementHelper {
                 /* Send activation code to user */
                 GlobalHelper.smsCenter?.sendSms(
                     userData.phone,
-                    `${Lang.YOUR_PASSWORD_IS}:\n${password}`
+                    `${GlobalHelper.__("YOUR_PASSWORD_IS")}:\n${password}`
                 );
 
                 /* Setup result */
                 result.success = true;
-                result.data = `${Lang.SUCCESS_FULLY_REGISTER}<br/>${Lang.PASSWORD_SEND_TO_PHONE_NUMBER}`;
-
-                // result.data = resetPassResult.data;
+                result.data = `${GlobalHelper.__(
+                    "SUCCESS_FULLY_REGISTER"
+                )}<br/>${GlobalHelper.__("PASSWORD_SEND_TO_PHONE_NUMBER")}`;
             } else {
-                result.data = Lang.INVALID_OTP;
+                result.data = GlobalHelper.__("INVALID_OTP");
             }
         } else {
-            result.data = Lang.INVALID_OTP;
+            result.data = GlobalHelper.__("INVALID_OTP");
         }
 
         return result;
@@ -341,7 +353,10 @@ export default class UserManagementHelper {
 
         const result = {
             success: data == null,
-            data: data == null ? "" : Lang.ALREADY_REGISTERED_NATIONALID,
+            data:
+                data == null
+                    ? ""
+                    : GlobalHelper.__("ALREADY_REGISTERED_NATIONALID"),
         };
 
         return result;
@@ -370,12 +385,15 @@ export default class UserManagementHelper {
                 },
             ],
         };
-        console.log(query);
+
         const data = await UserModel.findOne(query);
 
         const result = {
             success: data == null,
-            data: data == null ? "" : Lang.ALREADY_REGISTERED_PHONE_NUMBER,
+            data:
+                data == null
+                    ? ""
+                    : GlobalHelper.__("ALREADY_REGISTERED_PHONE_NUMBER"),
         };
 
         return result;
@@ -413,7 +431,7 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess ? "" : Lang.INVALID_OTP,
+            data: tokenSuccess ? "" : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;
@@ -421,6 +439,8 @@ export default class UserManagementHelper {
 
     /**
      * Check user activation code Register
+     * @param activationCodeData
+     * @param otpPerfix
      */
     public static async checkUserActivationCodeRegister(
         activationCodeData: OtpResponseType,
@@ -451,7 +471,7 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess ? "" : Lang.INVALID_OTP,
+            data: tokenSuccess ? "" : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;
@@ -459,6 +479,7 @@ export default class UserManagementHelper {
 
     /**
      * Generate activation code
+     * @param digits
      */
     public static async generateActivationCode(
         digits: number = 6
@@ -474,5 +495,59 @@ export default class UserManagementHelper {
         let start = parseInt("1" + Array(digits).fill("0").join(""));
 
         return Math.floor(Math.random() * start).toString();
+    }
+
+    /**
+     * save data in history login
+     */
+    public static async saveHistoryOtpLogin(
+        payload: OtpDataType,
+        type: string,
+        status: boolean
+    ): Promise<void> {
+        /* Set Result in History */
+        let historyData = {
+            token: payload.token,
+            activation_code: payload.activationCode,
+            registered_at: payload.registered_at,
+            user_id: payload.userId,
+            type: type,
+            status: status,
+        };
+
+        /* Register new user */
+        const LoginHistory: Model<ILoginHistoryModel> = GlobalData.dbEngine.model(
+            "LoginHistory"
+        );
+
+        const newLoginHistory: ILoginHistoryModel = await LoginHistory.create(
+            historyData
+        );
+    }
+
+    /**
+     * save data in history by user data login
+     */
+    public static async saveHistoryUserDataLogin(
+        data: any,
+        type: string,
+        status: boolean
+    ): Promise<void> {
+        /* Set Result in History */
+        let historyData = {
+            token: "Nan",
+            activation_code: "Nan",
+            registered_at: new Date(),
+            user_id: data._id,
+            type: type,
+            status: status,
+        };
+
+        /* Register new user */
+        const LoginHistory: Model<ILoginHistoryModel> = GlobalData.dbEngine.model(
+            "LoginHistory"
+        );
+
+        await LoginHistory.create(historyData);
     }
 }

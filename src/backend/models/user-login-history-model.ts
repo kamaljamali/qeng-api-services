@@ -1,7 +1,7 @@
 import {
     Document,
-    Mongoose,
     Model,
+    Mongoose,
     Schema,
     SchemaDefinition,
     SchemaOptions,
@@ -11,48 +11,44 @@ import {
 import { yellow } from "chalk";
 import IDBModel from "@Lib/interfaces/core/db-model-interface";
 import GlobalData from "@Core/Global/global-data";
-import GeneratePasswordHelper from "@BE/helpers/generate-password-helper";
 
 /**
- * User model interface
+ * LoginHistory model interface
  */
-export interface IUserModel extends Document {
-    name: string;
-    pwd: string;
-    phone: string;
-    first_name: string;
-    last_name: string;
-    activated_at?: Date;
-    created_by?: Types.ObjectId;
-
-    changePwd(newPwd: string): void;
+export interface ILoginHistoryModel extends Document {
+    token: string;
+    activation_code: string;
+    registered_at: Date;
+    user_id: Types.ObjectId;
+    type: string;
+    status: boolean;
 }
 
 /**
- * UserModel class
+ * LoginHistoryModel class
  */
-export default class UserModel implements IDBModel {
+export default class LoginHistoryModel implements IDBModel {
     /**
      * Get model name
      */
     public getName(): string {
-        return "User";
+        return "LoginHistory";
     }
 
     /**
      * Get database model name
      */
     public getDbName(): string | undefined {
-        return "users";
+        return "login_history";
     }
 
     /**
      *
      * @param dbEngine any DbEngine
      */
-    public async setup(dbEngine: Mongoose): Promise<Model<IUserModel>> {
+    public async setup(dbEngine: Mongoose): Promise<Model<ILoginHistoryModel>> {
         /* Create model */
-        const model: Model<IUserModel> = dbEngine.model<IUserModel>(
+        const model: Model<ILoginHistoryModel> = dbEngine.model<ILoginHistoryModel>(
             this.getName(),
             this.getSchema(),
             this.getDbName()
@@ -71,66 +67,39 @@ export default class UserModel implements IDBModel {
      */
     public getSchema(): Schema {
         const schemaDef: SchemaDefinition = {
-            name: {
-                type: String,
-                required: true,
-                trim: true,
-                unique: true,
-                index: true,
-            },
-
-            pwd: {
+            token: {
                 type: String,
                 required: true,
             },
-
-            first_name: {
+            activation_code: {
                 type: String,
                 required: true,
             },
-
-            last_name: {
+            user_id: {
+                type: Object,
+                required: true,
+            },
+            status: {
+                type: Boolean,
+                required: true,
+            },
+            type: {
                 type: String,
                 required: true,
             },
-
-            phone: {
-                type: String,
-                required: true,
-            },
-
-            activated_at: {
+            registered_at: {
                 type: Date,
+                required: true,
             },
         };
 
         /* Define schmea */
-        const schema: Schema = new Schema<IUserModel>(schemaDef, {
+        const schema: Schema = new Schema(schemaDef, {
             timestamps: {
                 createdAt: "created_at",
                 updatedAt: "updated_at",
             } as SchemaTimestampsConfig,
         } as SchemaOptions);
-
-        /* PreSchema */
-        schema.pre("save", async function (next) {
-            if (!this.isModified("pwd")) {
-                return next();
-            }
-
-            const user: IUserModel = this as IUserModel;
-            user.pwd = await GeneratePasswordHelper.encryptPassword(user.pwd);
-
-            next();
-        });
-
-        /* Methods */
-        schema.methods.changePwd = async function changePwd(
-            newPwd: string
-        ): Promise<any> {
-            this.pwd = newPwd;
-            return this.save();
-        };
 
         /* Return schema */
         return schema;
