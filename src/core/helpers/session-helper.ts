@@ -10,54 +10,54 @@ import { ClientOpts } from "redis";
  * Events class
  */
 export default class SessionHelper {
-  /**
-   * Initialize Session
-   * @param app Application
-   */
-  public async init(app: Application): Promise<void> {
-    const config: SessionConfigType = (await GlobalMethods.config(
-      "core/session",
-    )) as SessionConfigType;
+    /**
+     * Initialize Session
+     * @param app Application
+     */
+    public async init(app: Application): Promise<void> {
+        const config: SessionConfigType = (await GlobalMethods.config(
+            "core/session"
+        )) as SessionConfigType;
 
-    /* Init Session */
-    let sessionStore: Session.Store | Session.MemoryStore;
+        /* Init Session */
+        let sessionStore: Session.Store | Session.MemoryStore;
 
-    switch (config.store) {
-      case "redis":
-        sessionStore = await this.createRedisSessionStore();
-        break;
+        switch (config.store) {
+            case "redis":
+                sessionStore = await this.createRedisSessionStore();
+                break;
 
-      case "memory":
-      default:
-        sessionStore = new Session.MemoryStore();
-        break;
+            case "memory":
+            default:
+                sessionStore = new Session.MemoryStore();
+                break;
+        }
+
+        /* Setup session */
+        config.options.store = sessionStore;
+
+        /* Setup application */
+        app.use(Session(config.options));
     }
 
-    /* Setup session */
-    config.options.store = sessionStore;
+    /**
+     * Create a Redis-Session Store
+     */
+    private async createRedisSessionStore(): Promise<Session.Store> {
+        let config: ClientOpts = (await GlobalMethods.config(
+            "core/redis"
+        )) as ClientOpts;
 
-    /* Setup application */
-    app.use(Session(config.options));
-  }
+        /* Intialize redis-client */
+        const redisHelper: RedisClientHelper = new RedisClientHelper(config);
+        await redisHelper.connect();
 
-  /**
-   * Create a Redis-Session Store
-   */
-  private async createRedisSessionStore(): Promise<Session.Store> {
-    let config: ClientOpts = await GlobalMethods.config(
-      "core/redis",
-    ) as ClientOpts;
+        /* Init RedisStore */
+        let RedisStore = ConnectRedis(Session);
+        const redisStore: ConnectRedis.RedisStore = new RedisStore({
+            client: redisHelper.client,
+        });
 
-    /* Intialize redis-client */
-    const redisHelper: RedisClientHelper = new RedisClientHelper(config);
-    await redisHelper.connect();
-
-    /* Init RedisStore */
-    let RedisStore = ConnectRedis(Session);
-    const redisStore: ConnectRedis.RedisStore = new RedisStore({
-      client: redisHelper.client,
-    });
-
-    return redisStore;
-  }
+        return redisStore;
+    }
 }

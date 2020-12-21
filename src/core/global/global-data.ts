@@ -13,15 +13,15 @@ import RedisClientHelper from "@Core/Helpers/redis-client-helper";
  * Global data
  */
 export default class GlobalData {
-  public static logger: LoggerModule;
-  public static events: EventsModule;
-  public static router: RouterModule;
-  public static express: ExpressModule;
-  public static dbEngine: IDatabaseDriver;
-  public static redisEngine: RedisClientHelper;
+    public static logger: LoggerModule;
+    public static events: EventsModule;
+    public static router: RouterModule;
+    public static express: ExpressModule;
+    public static dbEngine: IDatabaseDriver;
+    public static redisEngine: RedisClientHelper;
 
-  public static debug: Debugger;
-  public static rateLimiter: RateLimit;
-  public static csrf: CSURF.CookieOptions;
-  public static upload: Multer.Multer;
+    public static debug: Debugger;
+    public static rateLimiter: RateLimit;
+    public static csrf: CSURF.CookieOptions;
+    public static upload: Multer.Multer;
 }

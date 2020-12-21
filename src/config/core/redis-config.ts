@@ -1,11 +1,13 @@
 const enabled: boolean = (process.env.REDIS_ENABLE || "false") == "true";
 
-export default (!enabled ? {} : {
-  host: process.env.REDIS_HOST || "127.0.0.1",
-  port: parseInt(process.env.REDIS_PORT || "6379"),
-  db: parseInt(process.env.REDIS_DB || "0"),
-  auth_pass: process.env.REDIS_AUTH,
-});
+export default !enabled
+    ? {}
+    : {
+          host: process.env.REDIS_HOST || "127.0.0.1",
+          port: parseInt(process.env.REDIS_PORT || "6379"),
+          db: parseInt(process.env.REDIS_DB || "0"),
+          auth_pass: process.env.REDIS_AUTH,
+      };
 
 /*
   host?: string;

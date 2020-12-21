@@ -6,43 +6,40 @@ import { ClientOpts } from "redis";
  * Redis client
  */
 export default class RedisHelper {
-  private _redisClient?: RedisClientHelper = undefined;
+    private _redisClient?: RedisClientHelper = undefined;
 
-  /**
-   * Getter: _redisClient
-   */
-  public get redisClient(): RedisClientHelper {
-    return this._redisClient as RedisClientHelper;
-  }
-
-  /**
-   * Connect
-   */
-  public async connect(): Promise<void> {
-    const config: ClientOpts = await GlobalMethods.config("core/redis");
-
-    if (!config.host) {
-      return;
+    /**
+     * Getter: _redisClient
+     */
+    public get redisClient(): RedisClientHelper {
+        return this._redisClient as RedisClientHelper;
     }
 
-    this._redisClient = new RedisClientHelper(config);
-    await this.redisClient.connect();
-  }
+    /**
+     * Connect
+     */
+    public async connect(): Promise<void> {
+        const config: ClientOpts = await GlobalMethods.config("core/redis");
 
-  /**
-   * DisConnect
-   */
-  public async disconnect(): Promise<void> {
-    await this.redisClient.disconnect();
-  }
+        if (!config.host) {
+            return;
+        }
 
-  /**
-   * DisConnect
-   */
-  public async runCmd(
-    cmd: string,
-    ...args: (string)[]
-  ): Promise<any> {
-    return this.redisClient.run(cmd, ...args);
-  }
+        this._redisClient = new RedisClientHelper(config);
+        await this.redisClient.connect();
+    }
+
+    /**
+     * DisConnect
+     */
+    public async disconnect(): Promise<void> {
+        await this.redisClient.disconnect();
+    }
+
+    /**
+     * DisConnect
+     */
+    public async runCmd(cmd: string, ...args: string[]): Promise<any> {
+        return this.redisClient.run(cmd, ...args);
+    }
 }
