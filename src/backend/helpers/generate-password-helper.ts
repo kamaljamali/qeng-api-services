@@ -1,6 +1,7 @@
 import { GeneratePasswordConfigType } from "@Lib/types/config/generate-password-config-type";
 import GlobalMethods from "@Core/Global/global-methods";
-import PWDGenerator from "generate-password";
+// import PWDGenerator from "generate-password";
+const PWDGenerator = require("generate-password");
 
 /**
  * Generate Password Helper class
@@ -34,7 +35,7 @@ export default class GeneratePasswordHelper {
     }
 
     /**
-     * Save data in history by user data login
+     * encrypt password
      */
     public static async encryptPassword(password: string): Promise<string> {
         const crypto = require("crypto");

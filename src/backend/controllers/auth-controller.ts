@@ -146,7 +146,7 @@ export default class AuthController {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        const phoneNumber: string = req.body as string;
+        const phoneNumber: string = req.body.phoneNumber as string;
 
         const result: ActionResultType = await UserManagementHelper.checkUserPhoneNumber(
             phoneNumber

@@ -15,6 +15,7 @@ import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
 import { SmsConfigType } from "@Lib/types/config/sms-config-type";
 import { ILoginHistoryModel } from "@BE/models/user-login-history-model";
 import GlobalMethods from "@Core/Global/global-methods";
+import GeneratePasswordHelper from "./generate-password-helper";
 
 /**
  * UserManagement Helper class
@@ -30,9 +31,12 @@ export default class UserManagementHelper {
 
         /* Check database */
         const UserModel: Model<IUserModel> = GlobalData.dbEngine.model("User");
+        const password: string = await GeneratePasswordHelper.encryptPassword(
+            userData.password
+        );
         const data = await UserModel.findOne({
             name: userData.nationalId,
-            pwd: userData.password,
+            pwd: password,
         });
 
         if (null != data) {
@@ -40,9 +44,12 @@ export default class UserManagementHelper {
         }
 
         const success = data != null;
+
         const result = {
-            success,
-            data: success ? null : GlobalHelper.__("INVALID_NATIONALID_OR_PASSWORD"),
+            success: success,
+            data: success
+                ? "GlobalData.router.routerManager.route()"
+                : GlobalHelper.__("INVALID_NATIONALID_OR_PASSWORD"),
         };
 
         return result;
@@ -143,7 +150,7 @@ export default class UserManagementHelper {
         result = {
             success: loginSuccess,
             data: loginSuccess
-                ? GlobalData.router.routerManager.route("home.index")
+                ? "GlobalData.router.routerManager.route()"
                 : GlobalHelper.__("INVALID_OTP"),
         };
 
@@ -198,7 +205,7 @@ export default class UserManagementHelper {
         result = {
             success: operationResult,
             data: operationResult
-                ? GlobalData.router.routerManager.route("auth.login")
+                ? "GlobalData.router.routerManager.route()"
                 : GlobalHelper.__("INVALID_OTP"),
         };
 
@@ -289,7 +296,6 @@ export default class UserManagementHelper {
             if (otpData.activationCode == otpResponse.activationCode) {
                 /* Generate password */
                 let password: string = await GlobalHelper.generatePassword?.generatePassword();
-                console.log(password);
 
                 const userData = {
                     name: otpData.userRegisterData.nationalId,
@@ -300,6 +306,7 @@ export default class UserManagementHelper {
                     activated_at: new Date(),
                 };
 
+                console.log(password);
                 /* Register new user */
                 const User: Model<IUserModel> = GlobalData.dbEngine.model(
                     "User"
@@ -373,18 +380,16 @@ export default class UserManagementHelper {
         /* Check database */
         const UserModel: Model<IUserModel> = GlobalData.dbEngine.model("User");
 
-        const temp = JSON.parse(JSON.stringify(phoneNumber));
-
         const query = {
             $or: [
-                { phone_number: temp.phoneNumber || phoneNumber },
-                { phone_number: "+98" + temp.phoneNumber || phoneNumber },
+                { phone: phoneNumber },
+                { phone: "+98" + phoneNumber },
                 {
-                    phone_number:
-                        "+98" + (temp.phoneNumber || phoneNumber).substring(1),
+                    phone: "+98" + phoneNumber.substring(1),
                 },
             ],
         };
+        console.log(query);
 
         const data = await UserModel.findOne(query);
 
