@@ -4,13 +4,13 @@ import GlobalMethods from "@Core/Global/global-methods";
 import DatabaseDriverInterface from "@Lib/interfaces/core/database-driver-interface";
 import IDBModel from "@Lib/interfaces/core/db-model-interface";
 import { DatabaseConfigType } from "@Lib/types/config/database-config-type";
-import { Mongoose, connect, Model, Document } from "mongoose";
+import * as Mongoose from "mongoose";
 
 /**
  * MongoDB driver
  */
 export default class MongoDbDriver implements DatabaseDriverInterface {
-    private _engine: Mongoose = new Mongoose();
+    private _engine: Mongoose.Mongoose = new Mongoose.Mongoose();
 
     /**
      * Create driver factory
@@ -22,14 +22,14 @@ export default class MongoDbDriver implements DatabaseDriverInterface {
     /**
      * Getter: _engine
      */
-    public get engine(): Mongoose {
+    public get engine(): Mongoose.Mongoose {
         return this._engine;
     }
 
     /**
      * Get the engine
      */
-    public getEngine(): Mongoose {
+    public getEngine(): Mongoose.Mongoose {
         return this.engine;
     }
 
@@ -39,13 +39,17 @@ export default class MongoDbDriver implements DatabaseDriverInterface {
      */
     public async connect(config: DatabaseConfigType): Promise<void> {
         const connStr: string = this.getConnectionUrl(config);
-        this._engine = await connect(connStr, config.dbConfig);
+
+        this._engine = await Mongoose.connect(
+            connStr,
+            config.dbConfig as Mongoose.ConnectOptions
+        );
 
         GlobalData.logger.info(`
         MongoDB driver connected successfully
         URI: ${connStr}
         Config: \n${blue(JSON.stringify(config, null, 2))}
-    `);
+        `);
 
         /* Load modesl */
         await this.loadModels();
@@ -62,7 +66,7 @@ export default class MongoDbDriver implements DatabaseDriverInterface {
      * Get a model
      * @param name string Model name
      */
-    public model(name: string): Model<Document> {
+    public model(name: string): Mongoose.Model<Mongoose.Document> {
         return this.engine.model(name);
     }
 
