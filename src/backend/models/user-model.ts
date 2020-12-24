@@ -69,7 +69,7 @@ export default class UserModel implements IDBModel {
             name: {
                 type: String,
                 required: true,
-                trimed: true,
+                trim: true,
                 unique: true,
                 index: true,
             },
