@@ -7,17 +7,32 @@ import Base from "./base";
  * App class
  */
 export class App extends Base {
-    private routesData: RouteFileType = {} as RouteFileType;
+    public _routesData?: RouteFileType = undefined;
+
+    /**
+     * Getter: _routesData
+     */
+    public get routesData(): RouteFileType {
+        return this._routesData as RouteFileType;
+    }
 
     /**
      * Constructor
      */
     constructor() {
         super();
+        this.loadRoutes();
+    }
 
-        import("@PUBLIC/router-manifest.json").then((res) => {
-            this.routesData = res.default || res;
-        });
+    /**
+     * Load routes
+     */
+    public async loadRoutes() {
+        if (!this._routesData) {
+            const res = await import("@PUBLIC/router-manifest.json");
+
+            this._routesData = res.default || res;
+        }
     }
 
     /**
@@ -45,4 +60,7 @@ export class App extends Base {
     }
 }
 
+/**
+ * Export default value
+ */
 export default new App();
