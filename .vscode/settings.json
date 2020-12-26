@@ -1,5 +1,5 @@
 {
-  "vetur.format.options.tabSize": 4,
-  "editor.tabSize": 4,
-  "prettier.tabWidth": 4
+    "vetur.format.options.tabSize": 4,
+    "editor.tabSize": 4,
+    "prettier.tabWidth": 4
 }
