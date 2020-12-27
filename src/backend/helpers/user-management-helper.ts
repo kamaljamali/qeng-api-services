@@ -422,15 +422,8 @@ export default class UserManagementHelper {
         let tokenSuccess: boolean = false;
         if (redisData) {
             const optData: OtpDataType = JSON.parse(redisData);
-
             if (optData.activationCode == activationCodeData.activationCode) {
                 tokenSuccess = true;
-
-                /* Delete otp-request from redis-db */
-                const delRedisData = await GlobalHelper.redisHelper?.runCmd(
-                    "del",
-                    `otp-request:${otpPerfix}:${activationCodeData.token}`
-                );
             }
         }
 
