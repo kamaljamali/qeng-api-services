@@ -306,7 +306,6 @@ export default class UserManagementHelper {
                     activated_at: new Date(),
                 };
 
-                console.log(password);
                 /* Register new user */
                 const User: Model<IUserModel> = GlobalData.dbEngine.model(
                     "User"
@@ -389,7 +388,6 @@ export default class UserManagementHelper {
                 },
             ],
         };
-        console.log(query);
 
         const data = await UserModel.findOne(query);
 
@@ -429,7 +427,9 @@ export default class UserManagementHelper {
 
         result = {
             success: tokenSuccess,
-            data: tokenSuccess ? "" : GlobalHelper.__("INVALID_OTP"),
+            data: tokenSuccess
+                ? activationCodeData.token
+                : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;
