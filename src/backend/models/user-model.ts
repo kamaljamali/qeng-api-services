@@ -102,6 +102,10 @@ export default class UserModel implements IDBModel {
             activated_at: {
                 type: Date,
             },
+
+            created_by: {
+                type: Types.ObjectId,
+            },
         };
 
         /* Define schmea */
@@ -128,8 +132,10 @@ export default class UserModel implements IDBModel {
         schema.methods.changePwd = async function changePwd(
             newPwd: string
         ): Promise<any> {
-            this.pwd = newPwd;
-            return this.save();
+            const doc : IUserModel = this as IUserModel;
+
+            doc.pwd = newPwd;
+            return doc.save();
         };
 
         /* Return schema */
