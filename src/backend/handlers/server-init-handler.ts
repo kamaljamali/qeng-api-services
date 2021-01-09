@@ -5,6 +5,7 @@ import RedisHelper from "@BE/helpers/redis-helper";
 import GlobalHelper from "@BE/helpers/global-helper";
 import SmsCenter from "@BE/helpers/sms-center";
 import GeneratePassword from "@BE/helpers/generate-password-helper";
+import JwtHelper from "@BE/helpers/jwt-helper";
 
 /**
  * Server-init handler
@@ -56,5 +57,8 @@ export default class ServerInitHandler implements IEventHandler {
 
         /* Sms Helper */
         GlobalHelper.generatePassword = new GeneratePassword();
+
+        /* Jwt Helper */
+        GlobalHelper.jwtHelper = new JwtHelper();
     }
 }

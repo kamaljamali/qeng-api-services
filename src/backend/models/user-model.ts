@@ -69,7 +69,7 @@ export default class UserModel implements IDBModel {
     /**
      * Get model schema
      */
-    public getSchema(): Schema {
+    public getSchema(): Schema<any> {
         const schemaDef: SchemaDefinition = {
             name: {
                 type: String,
@@ -109,7 +109,7 @@ export default class UserModel implements IDBModel {
         };
 
         /* Define schmea */
-        const schema: Schema = new Schema<IUserModel>(schemaDef, {
+        const schema: Schema<IUserModel> = new Schema<IUserModel>(schemaDef, {
             timestamps: {
                 createdAt: "created_at",
                 updatedAt: "updated_at",
@@ -132,7 +132,7 @@ export default class UserModel implements IDBModel {
         schema.methods.changePwd = async function changePwd(
             newPwd: string
         ): Promise<any> {
-            const doc : IUserModel = this as IUserModel;
+            const doc: IUserModel = this as IUserModel;
 
             doc.pwd = newPwd;
             return doc.save();
