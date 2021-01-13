@@ -25,7 +25,7 @@ export interface IUserModel extends Document {
     activated_at?: Date;
     created_by?: Types.ObjectId;
 
-    changePwd(newPwd: string): void;
+    changePwd(newPwd: string): Promise<any>;
 }
 
 /**
@@ -132,7 +132,7 @@ export default class UserModel implements IDBModel {
         schema.methods.changePwd = async function changePwd(
             newPwd: string
         ): Promise<any> {
-            const doc : IUserModel = this as IUserModel;
+            const doc: IUserModel = this as IUserModel;
 
             doc.pwd = newPwd;
             return doc.save();
