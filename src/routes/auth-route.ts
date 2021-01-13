@@ -1,4 +1,6 @@
 import AuthController from "@BE/Controllers/auth-controller";
+import JwtHelper from "@BE/helpers/jwt-helper";
+import JwtMiddleware from "@BE/middlewares/jwt-middleware";
 import BaseRouter from "@Core/Helpers/base-router-helper";
 
 /**
@@ -27,7 +29,10 @@ export default class AuthRoute extends BaseRouter {
 
         super.post(
             "/requestOtpToken",
-            [controller.requestOtpToken.bind(controller)],
+            [
+                JwtMiddleware._instance.apply,
+                controller.requestOtpToken.bind(controller),
+            ],
             "auth.request-otp-token"
         );
 

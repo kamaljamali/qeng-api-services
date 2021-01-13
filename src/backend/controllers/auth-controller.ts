@@ -7,6 +7,13 @@ import { UserLoginOtpType } from "@Lib/types/backend/auth/user-login-otp-type";
 import { OtpResponseType } from "@Lib/types/backend/auth/opt-response-type";
 import { UserResetPasswordType } from "@Lib/types/backend/auth/user-reset-password";
 import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
+import GlobalHelper from "@BE/helpers/global-helper";
+import { toHandlerKey } from "vue";
+
+export type JwtSignType = {
+    name: string;
+    pwd: string;
+};
 
 /**
  * Auth controller
@@ -23,11 +30,22 @@ export default class AuthController {
         res: Response,
         next: NextFunction
     ): Promise<void> {
+        const auth = (req as any).auth;
+        console.log(auth);
+
         const userData: UserLoginDataType = req.body as UserLoginDataType;
 
         const result: ActionResultType = await UserManagementHelper.loginByUserData(
             userData
         );
+
+        if (result.success) {
+            let jwtToken: string = (await GlobalHelper.jwtHelper?.sign({
+                data: result.data,
+            })) as string;
+
+            result.data = jwtToken;
+        }
 
         res.status(200).send(result).end();
     }
