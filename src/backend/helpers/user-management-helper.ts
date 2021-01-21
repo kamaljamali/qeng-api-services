@@ -306,7 +306,6 @@ export default class UserManagementHelper {
                     activated_at: new Date(),
                 };
 
-                console.log(password);
                 /* Register new user */
                 const User: Model<IUserModel> = GlobalData.dbEngine.model(
                     "User"

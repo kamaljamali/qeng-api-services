@@ -30,9 +30,6 @@ export default class AuthController {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        const auth = (req as any).auth;
-        console.log(auth);
-
         const userData: UserLoginDataType = req.body as UserLoginDataType;
 
         const result: ActionResultType = await UserManagementHelper.loginByUserData(

@@ -1,5 +1,4 @@
 import AuthController from "@BE/Controllers/auth-controller";
-import JwtHelper from "@BE/helpers/jwt-helper";
 import JwtMiddleware from "@BE/middlewares/jwt-middleware";
 import BaseRouter from "@Core/Helpers/base-router-helper";
 
@@ -30,7 +29,6 @@ export default class AuthRoute extends BaseRouter {
         super.post(
             "/requestOtpToken",
             [
-                JwtMiddleware._instance.apply,
                 controller.requestOtpToken.bind(controller),
             ],
             "auth.request-otp-token"
@@ -56,13 +54,19 @@ export default class AuthRoute extends BaseRouter {
 
         super.post(
             "/checkUserNationalId",
-            [controller.checkNationalId.bind(controller)],
+            [
+                JwtMiddleware._instance.apply,
+                controller.checkNationalId.bind(controller),
+            ],
             "auth.check-national-id"
         );
 
         super.post(
             "/checkUserPhoneNumber",
-            [controller.checkPhoneNumber.bind(controller)],
+            [
+                JwtMiddleware._instance.apply,
+                controller.checkPhoneNumber.bind(controller),
+            ],
             "auth.check-phone-number"
         );
 
