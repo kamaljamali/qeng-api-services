@@ -49,8 +49,8 @@ export default class JwtHelper {
         userConfig: JWT.SignOptions = {}
     ): Promise<any> {
         let options: JWT.SignOptions = _.merge(this.jwtConfig, userConfig);
-        const jwtToken: any = JWT.verify(token, this.publicKey, options);
 
+        const jwtToken: any = JWT.verify(token, this.publicKey);
         return jwtToken;
     }
 }

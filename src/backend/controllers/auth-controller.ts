@@ -9,6 +9,7 @@ import { UserResetPasswordType } from "@Lib/types/backend/auth/user-reset-passwo
 import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
 import GlobalHelper from "@BE/helpers/global-helper";
 import { toHandlerKey } from "vue";
+import JwtMiddleware from "@BE/middlewares/jwt-middleware";
 
 export type JwtSignType = {
     name: string;
@@ -43,7 +44,6 @@ export default class AuthController {
 
             result.data = jwtToken;
         }
-
         res.status(200).send(result).end();
     }
 
@@ -86,6 +86,13 @@ export default class AuthController {
             OtpPrefixEnum.LOGIN
         );
 
+        if (result.success) {
+            let jwtToken: string = (await GlobalHelper.jwtHelper?.sign({
+                data: result.data,
+            })) as string;
+
+            result.data = jwtToken;
+        }
         res.status(200).send(result).end();
     }
 

@@ -28,9 +28,7 @@ export default class AuthRoute extends BaseRouter {
 
         super.post(
             "/requestOtpToken",
-            [
-                controller.requestOtpToken.bind(controller),
-            ],
+            [controller.requestOtpToken.bind(controller)],
             "auth.request-otp-token"
         );
 

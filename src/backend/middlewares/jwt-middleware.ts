@@ -20,7 +20,7 @@ export default class JwtMiddleware implements IMiddleware {
         next: NextFunction
     ): Promise<void> {
         let jwtToken: any;
-        
+
         try {
             const token: string = req.headers["jwt-token"] as string;
             jwtToken = await GlobalHelper.jwtHelper?.verify(token);
@@ -30,7 +30,6 @@ export default class JwtMiddleware implements IMiddleware {
             res.sendStatus(404);
         } else {
             (req as any).auth = jwtToken;
-
             next();
         }
     }
