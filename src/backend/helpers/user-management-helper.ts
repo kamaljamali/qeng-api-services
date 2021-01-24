@@ -16,6 +16,7 @@ import { SmsConfigType } from "@Lib/types/config/sms-config-type";
 import { ILoginHistoryModel } from "@BE/models/user-login-history-model";
 import GlobalMethods from "@Core/Global/global-methods";
 import GeneratePasswordHelper from "./generate-password-helper";
+import { singnInUserData } from "@Lib/types/backend/auth/signin-user-data-type";
 
 /**
  * UserManagement Helper class
@@ -39,7 +40,15 @@ export default class UserManagementHelper {
             pwd: password,
         });
 
+        let loginData: singnInUserData = {} as singnInUserData;
+
         if (null != data) {
+            loginData.userId = data._id;
+            loginData.firstName = data.first_name;
+            loginData.lastName = data.last_name;
+            loginData.nationalId = data.last_name;
+            loginData.phoneNumber = data.phone;
+
             this.saveHistoryUserDataLogin(data, "userdata", true);
         }
 
@@ -48,7 +57,7 @@ export default class UserManagementHelper {
         const result = {
             success: success,
             data: success
-                ? "GlobalData.router.routerManager.route()"
+                ? loginData
                 : GlobalHelper.__("INVALID_NATIONALID_OR_PASSWORD"),
         };
 
@@ -130,11 +139,24 @@ export default class UserManagementHelper {
         );
 
         let loginSuccess: boolean = false;
+        let loginData: singnInUserData = {} as singnInUserData;
 
         if (redisData) {
             const optData: OtpDataType = JSON.parse(redisData);
             if (optData.activationCode == otpResponse.activationCode) {
                 loginSuccess = true;
+
+                const UserModel: Model<IUserModel> = GlobalData.dbEngine.model(
+                    "User"
+                );
+                const user = await UserModel.findById(optData.userId);
+                if (user) {
+                    loginData.userId = user._id;
+                    loginData.firstName = user.first_name;
+                    loginData.lastName = user.last_name;
+                    loginData.nationalId = user.last_name;
+                    loginData.phoneNumber = user.phone;
+                }
 
                 /* Delete otp-request from redis-db */
                 const delRedisData = await GlobalHelper.redisHelper?.runCmd(
@@ -149,9 +171,7 @@ export default class UserManagementHelper {
 
         result = {
             success: loginSuccess,
-            data: loginSuccess
-                ? "GlobalData.router.routerManager.route()"
-                : GlobalHelper.__("INVALID_OTP"),
+            data: loginSuccess ? loginData : GlobalHelper.__("INVALID_OTP"),
         };
 
         return result;

@@ -25,7 +25,7 @@ export interface IUserModel extends Document {
     activated_at?: Date;
     created_by?: Types.ObjectId;
 
-    changePwd(newPwd: string): void;
+    changePwd(newPwd: string): Promise<any>;
 }
 
 /**
@@ -69,7 +69,7 @@ export default class UserModel implements IDBModel {
     /**
      * Get model schema
      */
-    public getSchema(): Schema {
+    public getSchema(): Schema<any> {
         const schemaDef: SchemaDefinition = {
             name: {
                 type: String,
@@ -102,10 +102,14 @@ export default class UserModel implements IDBModel {
             activated_at: {
                 type: Date,
             },
+
+            created_by: {
+                type: Types.ObjectId,
+            },
         };
 
         /* Define schmea */
-        const schema: Schema = new Schema<IUserModel>(schemaDef, {
+        const schema: Schema<IUserModel> = new Schema<IUserModel>(schemaDef, {
             timestamps: {
                 createdAt: "created_at",
                 updatedAt: "updated_at",
@@ -128,8 +132,10 @@ export default class UserModel implements IDBModel {
         schema.methods.changePwd = async function changePwd(
             newPwd: string
         ): Promise<any> {
-            this.pwd = newPwd;
-            return this.save();
+            const doc: IUserModel = this as IUserModel;
+
+            doc.pwd = newPwd;
+            return doc.save();
         };
 
         /* Return schema */

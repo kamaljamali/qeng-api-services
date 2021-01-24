@@ -2,7 +2,7 @@ import RedisHelper from "./redis-helper";
 import SmsCenter from "./sms-center";
 import GeneratePassword from "./generate-password-helper";
 import LanguageHelper from "@BE/helpers/language-helper";
-import IHash from "@Lib/interfaces/hash-interface";
+import JwtHelper from "./jwt-helper";
 
 /**
  * Global helper
@@ -13,6 +13,7 @@ export default class GlobalHelper {
 
     public static redisHelper?: RedisHelper = undefined;
     public static smsCenter?: SmsCenter = undefined;
+    public static jwtHelper?: JwtHelper = undefined;
 
     /**
      * Get key

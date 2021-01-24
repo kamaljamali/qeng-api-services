@@ -7,6 +7,14 @@ import { UserLoginOtpType } from "@Lib/types/backend/auth/user-login-otp-type";
 import { OtpResponseType } from "@Lib/types/backend/auth/opt-response-type";
 import { UserResetPasswordType } from "@Lib/types/backend/auth/user-reset-password";
 import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
+import GlobalHelper from "@BE/helpers/global-helper";
+import { toHandlerKey } from "vue";
+import JwtMiddleware from "@BE/middlewares/jwt-middleware";
+
+export type JwtSignType = {
+    name: string;
+    pwd: string;
+};
 
 /**
  * Auth controller
@@ -29,6 +37,13 @@ export default class AuthController {
             userData
         );
 
+        if (result.success) {
+            let jwtToken: string = (await GlobalHelper.jwtHelper?.sign({
+                data: result.data,
+            })) as string;
+
+            result.data = jwtToken;
+        }
         res.status(200).send(result).end();
     }
 
@@ -71,6 +86,13 @@ export default class AuthController {
             OtpPrefixEnum.LOGIN
         );
 
+        if (result.success) {
+            let jwtToken: string = (await GlobalHelper.jwtHelper?.sign({
+                data: result.data,
+            })) as string;
+
+            result.data = jwtToken;
+        }
         res.status(200).send(result).end();
     }
 
