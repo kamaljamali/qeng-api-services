@@ -12,7 +12,7 @@ export default class JwtHelper {
     private get jwtConfig(): JWT.SignOptions {
         return {
             algorithm: "RS512",
-            expiresIn: "30m",
+            expiresIn: "24h",
             jwtid: uuidV4(),
         } as JWT.SignOptions;
     }

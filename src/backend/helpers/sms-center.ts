@@ -1,7 +1,8 @@
 import GlobalData from "@Core/Global/global-data";
 import GlobalMethods from "@Core/Global/global-methods";
 import { SmsConfigType } from "@Lib/types/config/sms-config-type";
-import Axios, { AxiosRequestConfig } from "axios";
+import { AxiosResponse } from "axios";
+import AxiosModule from "@BE/helpers/axios-module";
 
 export default class SmsCenter {
     /**
@@ -36,21 +37,25 @@ export default class SmsCenter {
         sendDate?: number,
         checkingIds?: string
     ): Promise<any> {
+        // const data = {
+        //     message,
+        //     sender: this._config.number,
+        //     Receptor: target,
+        //     senddate: sendDate,
+        //     checkingids: checkingIds,
+        // };
         const data = {
-            message,
-            sender: this._config.number,
-            Receptor: target,
-            senddate: sendDate,
-            checkingids: checkingIds,
+            to: target,
+            body: message,
         };
 
-        const axiosHeaders: AxiosRequestConfig = {
-            headers: this._config.headers,
-        };
+        // const axiosHeaders: AxiosRequestConfig = {
+        //     headers: this._config.headers,
+        // };
 
         try {
             if (this._config.sendSms) {
-                return await Axios.post(this._config.url, data, axiosHeaders);
+                return await AxiosModule.post(this._config.url, data);
             }
         } catch (err) {
             GlobalData.logger.error(err);
