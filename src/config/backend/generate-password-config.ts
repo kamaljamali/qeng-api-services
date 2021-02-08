@@ -3,8 +3,8 @@ export default {
 
     numbers: true,
     symbols: false,
-    lowercase: true,
-    uppercase: true,
+    lowercase: false,
+    uppercase: false,
     excludeSimilarCharacters: false,
 
     exclude: "0olij",
