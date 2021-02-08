@@ -510,9 +510,11 @@ export default class UserManagementHelper {
             return "111111";
         }
 
-        let start = parseInt("1" + Array(digits).fill("0").join(""));
+        // let start = parseInt("1" + Array(digits).fill("0").join(""));
+        let start = Math.floor(100000 + Math.random() * 900000);
 
-        return Math.floor(Math.random() * start).toString();
+        // return Math.floor(Math.random() * start).toString();
+        return start.toString();
     }
 
     /**
