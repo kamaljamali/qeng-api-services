@@ -8,13 +8,7 @@ import { OtpResponseType } from "@Lib/types/backend/auth/opt-response-type";
 import { UserResetPasswordType } from "@Lib/types/backend/auth/user-reset-password";
 import { OtpPrefixEnum } from "@Lib/enums/backend/opt-prefix-enum";
 import GlobalHelper from "@BE/helpers/global-helper";
-import { toHandlerKey } from "vue";
 import JwtMiddleware from "@BE/middlewares/jwt-middleware";
-
-export type JwtSignType = {
-    name: string;
-    pwd: string;
-};
 
 /**
  * Auth controller

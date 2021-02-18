@@ -17,6 +17,8 @@ import { ILoginHistoryModel } from "@BE/models/user-login-history-model";
 import GlobalMethods from "@Core/Global/global-methods";
 import GeneratePasswordHelper from "./generate-password-helper";
 import { singnInUserData } from "@Lib/types/backend/auth/signin-user-data-type";
+import { Routes } from "@BE/helpers/service-route-helper";
+import AxiosModule from "@BE/helpers/axios-module";
 
 /**
  * UserManagement Helper class
@@ -330,7 +332,10 @@ export default class UserManagementHelper {
                 const User: Model<IUserModel> = GlobalData.dbEngine.model(
                     "User"
                 );
-                await User.create(userData);
+                const EWresult = await User.create(userData);
+
+                /* create e-wallet user */
+                this.createEWallet(EWresult);
 
                 /* Delete otp-request from redis-db */
                 await GlobalHelper.redisHelper?.runCmd(
@@ -569,5 +574,20 @@ export default class UserManagementHelper {
         );
 
         await LoginHistory.create(historyData);
+    }
+
+    /**
+     * create e wallet
+     */
+    public static async createEWallet(data: any): Promise<void> {
+        const url = Routes["ewallet.create"];
+
+        const Data = {
+            walletCode: data._id,
+            createdBy: data._id,
+            description: "",
+            walletData: null,
+        };
+        await AxiosModule.post(url, Data);
     }
 }
