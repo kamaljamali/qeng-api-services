@@ -48,7 +48,7 @@ export default class UserManagementHelper {
             loginData.userId = data._id;
             loginData.firstName = data.first_name;
             loginData.lastName = data.last_name;
-            loginData.nationalId = data.last_name;
+            loginData.nationalId = data.name;
             loginData.phoneNumber = data.phone;
 
             this.saveHistoryUserDataLogin(data, "userdata", true);
@@ -156,7 +156,7 @@ export default class UserManagementHelper {
                     loginData.userId = user._id;
                     loginData.firstName = user.first_name;
                     loginData.lastName = user.last_name;
-                    loginData.nationalId = user.last_name;
+                    loginData.nationalId = user.name;
                     loginData.phoneNumber = user.phone;
                 }
 
